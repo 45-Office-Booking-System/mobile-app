@@ -1,10 +1,12 @@
-class Customer {
+class User {
+  String id;
   String username;
   String email;
   String alamat;
   String password;
 
-  Customer({
+  User({
+    required this.id,
     required this.username,
     required this.email,
     required this.alamat,
