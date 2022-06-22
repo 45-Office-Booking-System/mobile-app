@@ -67,6 +67,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                TextField(
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: primaryColor500,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Cari Gedung, Kantor, Penyewaan Tempat lainnya",
+                    hintStyle:
+                        const TextStyle(fontSize: 12.0, color: primaryColor500),
+                    suffixIcon: const Icon(Icons.search),
+                  ),
+                ),
               ],
             ),
           ),

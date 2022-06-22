@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/auth/auth_screen.dart';
+import 'package:kantoor_app/screens/main/home/home_screen.dart';
 import 'package:kantoor_app/screens/onboarding/onboarding_screen.dart';
 import 'package:kantoor_app/viewModels/screen_index_value.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: skipAuth ? const AuthScreen() : const OnboardingScreen(),
+        home: skipAuth ? const HomeScreen() : const HomeScreen(),
       ),
     );
   }
