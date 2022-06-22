@@ -7,6 +7,7 @@ const Color primaryColor300 = Color(0xFF68C790);
 const Color primaryColor100 = Color(0xFFB3E3C8);
 const Color colorWhite = Colors.white;
 const Color colorBlack = Colors.black;
+const Color navbarColor = Color(0xFFF2F2F2);
 
 TextStyle titleTextStyle = GoogleFonts.poppins(
   fontSize: 32,

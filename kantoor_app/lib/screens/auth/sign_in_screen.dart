@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/auth/widgets/auth_button.dart';
 import 'package:kantoor_app/screens/auth/widgets/auth_textfield.dart';
+import 'package:kantoor_app/screens/main/main_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -93,7 +94,26 @@ class _SignInScreenState extends State<SignInScreen> {
               authButton(
                 context: context,
                 isLogin: true,
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const MainScreen();
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        final tween = Tween(begin: begin, end: end);
+                        final offsetAnimation = animation.drive(tween);
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 500),
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 height: 8.0,

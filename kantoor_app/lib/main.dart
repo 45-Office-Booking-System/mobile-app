@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/auth/auth_screen.dart';
 import 'package:kantoor_app/screens/onboarding/onboarding_screen.dart';
+import 'package:kantoor_app/viewModels/screen_index_value.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -20,13 +22,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Kantoor App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ScreenIndexProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Kantoor App',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: skipAuth ? const AuthScreen() : const OnboardingScreen(),
       ),
-      home: skipAuth ? const AuthScreen() : const OnboardingScreen(),
     );
   }
 }
