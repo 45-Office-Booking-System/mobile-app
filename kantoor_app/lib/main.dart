@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:kantoor_app/screens/auth/auth_screen.dart';
-import 'package:kantoor_app/screens/main/home/home_screen.dart';
-import 'package:kantoor_app/screens/onboarding/onboarding_screen.dart';
+import 'package:kantoor_app/screens/onboarding/splash_screen.dart';
+import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/location_selected_value.dart';
 import 'package:kantoor_app/viewModels/screen_index_value.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final skipAuth = prefs.getBool('skipAuth') ?? false;
-
-  runApp(MyApp(skipAuth: skipAuth));
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool skipAuth;
-  const MyApp({
-    Key? key,
-    required this.skipAuth,
-  }) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +19,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ScreenIndexProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => LocationSelectedProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Kantoor App',
         theme: ThemeData(
           primarySwatch: Colors.green,
+          scaffoldBackgroundColor: colorWhite,
         ),
-        home: skipAuth ? const HomeScreen() : const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
