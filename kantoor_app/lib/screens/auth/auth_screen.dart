@@ -102,11 +102,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               ),
               Text(
                 'Kantoor',
-                style: titleTextStyle,
+                style: titleTextStyle.copyWith(color: colorWhite),
               ),
               Text(
                 'Platform penyewaan gedung mudah dan aman',
-                style: subtitleTextStyle.copyWith(fontWeight: FontWeight.bold),
+                style: subtitleTextStyle.copyWith(color: colorWhite, fontWeight: FontWeight.bold),
               ),
             ],
           ),

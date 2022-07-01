@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:kantoor_app/screens/main/home/detail_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 import 'package:kantoor_app/viewModels/location_selected_value.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: MediaQuery.of(context).size.height * 0.33,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: primaryColor500.withOpacity(0.8),
+            color: primaryColor500.withOpacity(0.9),
           ),
           child: Column(
             children: [
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 60.0,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -113,11 +114,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           'Selamat Datang!',
-                          style: titleTextStyle.copyWith(fontSize: 24.0),
+                          style: titleTextStyle.copyWith(
+                            fontSize: 24.0,
+                            color: colorWhite,
+                          ),
                         ),
                         Text(
                           'Hi, Indah Putri!',
-                          style: subtitleTextStyle.copyWith(fontSize: 16.0),
+                          style: subtitleTextStyle.copyWith(
+                            fontSize: 16.0,
+                            color: colorWhite,
+                          ),
                         ),
                       ],
                     ),
@@ -249,67 +256,89 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [1, 2, 3, 4, 5].map((i) {
           return Builder(
             builder: (BuildContext context) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                            "https://media.istockphoto.com/photos/jakarta-skycrapers-picture-id1371966285?b=1&k=20&m=1371966285&s=170667a&w=0&h=cyxDR2diZuBMf2KnkxHtGzpeGc6tpZH_40nyPkwzi0M="),
-                        fit: BoxFit.cover,
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const DetailScreen();
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        final tween = Tween(begin: begin, end: end);
+                        final offsetAnimation = animation.drive(tween);
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 500),
+                    ),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                              "https://media.istockphoto.com/photos/jakarta-skycrapers-picture-id1371966285?b=1&k=20&m=1371966285&s=170667a&w=0&h=cyxDR2diZuBMf2KnkxHtGzpeGc6tpZH_40nyPkwzi0M="),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  RatingStars(
-                    valueLabelVisibility: false,
-                    value: 3.5,
-                    onValueChanged: (v) {},
-                    starBuilder: (index, color) => Icon(
-                      Icons.star,
-                      color: color,
+                    const SizedBox(
+                      height: 5.0,
                     ),
-                    starCount: 5,
-                    starSize: 20,
-                    maxValue: 5,
-                    starSpacing: 2,
-                    animationDuration: Duration(milliseconds: 1000),
-                    valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                    valueLabelMargin: const EdgeInsets.only(right: 8),
-                    starOffColor: const Color(0xffe7e8ea),
-                    starColor: Colors.yellow,
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Text(
-                      'Gedung $i',
-                      style: titleTextStyle.copyWith(
-                        color: colorBlack,
-                        fontSize: 16.0,
+                    RatingStars(
+                      valueLabelVisibility: false,
+                      value: 3.5,
+                      onValueChanged: (v) {},
+                      starBuilder: (index, color) => Icon(
+                        Icons.star,
+                        color: color,
+                      ),
+                      starCount: 5,
+                      starSize: 20,
+                      maxValue: 5,
+                      starSpacing: 2,
+                      animationDuration: Duration(milliseconds: 1000),
+                      valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                      valueLabelMargin: const EdgeInsets.only(right: 8),
+                      starOffColor: const Color(0xffe7e8ea),
+                      starColor: Colors.yellow,
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Text(
+                        'Gedung $i',
+                        style: titleTextStyle.copyWith(
+                          color: colorBlack,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Text(
-                      'Kota $i',
-                      style: subtitleTextStyle.copyWith(
-                        color: colorBlack,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Text(
+                        'Kota $i',
+                        style: subtitleTextStyle.copyWith(
+                          color: colorBlack,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               );
             },
           );
@@ -321,10 +350,9 @@ class _HomeScreenState extends State<HomeScreen> {
           enlargeCenterPage: true,
           autoPlay: true,
           aspectRatio: 16 / 9,
-          autoPlayCurve: Curves.fastOutSlowIn,
           enableInfiniteScroll: false,
           autoPlayAnimationDuration: const Duration(milliseconds: 800),
-          viewportFraction: 0.8,
+          viewportFraction: 0.85,
         ),
       ),
     );
