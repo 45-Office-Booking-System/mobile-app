@@ -12,11 +12,11 @@ const Color navbarColor = Color(0xFFF2F2F2);
 TextStyle titleTextStyle = GoogleFonts.poppins(
   fontSize: 32,
   fontWeight: FontWeight.bold,
-  color: colorWhite,
+  color: colorBlack,
 );
 
 TextStyle subtitleTextStyle = GoogleFonts.poppins(
   fontSize: 12,
   fontWeight: FontWeight.w300,
-  color: colorWhite,
+  color: colorBlack,
 );
