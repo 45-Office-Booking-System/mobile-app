@@ -31,8 +31,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Container(
-                height: MediaQuery.of(context).size.width,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.78,
                 child: ListView.builder(
                   itemCount: cards.length,
                   itemBuilder: (BuildContext context, index) {
@@ -73,20 +73,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                       child: Column(
                                         children: [
                                           Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.33,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                            height: MediaQuery.of(context).size.height * 0.33,
+                                            width: MediaQuery.of(context).size.width,
                                             decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(card.image),
+                                              image: const DecorationImage(
+                                                image: NetworkImage(
+                                                    "https://media.istockphoto.com/photos/jakarta-skycrapers-picture-id1371966285?b=1&k=20&m=1371966285&s=170667a&w=0&h=cyxDR2diZuBMf2KnkxHtGzpeGc6tpZH_40nyPkwzi0M="),
                                                 fit: BoxFit.cover,
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
                                           ),
                                           const SizedBox(
@@ -101,8 +96,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                 valueLabelVisibility: false,
                                                 value: card.rating,
                                                 onValueChanged: (v) {},
-                                                starBuilder: (index, color) =>
-                                                    Icon(
+                                                starBuilder: (index, color) => Icon(
                                                   Icons.star,
                                                   color: color,
                                                 ),
@@ -110,35 +104,24 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                 starSize: 20,
                                                 maxValue: 5,
                                                 starSpacing: 2,
-                                                animationDuration:
-                                                    const Duration(
-                                                        milliseconds: 1000),
+                                                animationDuration: const Duration(milliseconds: 1000),
                                                 valueLabelPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 1,
-                                                        horizontal: 8),
-                                                valueLabelMargin:
-                                                    const EdgeInsets.only(
-                                                        right: 8),
-                                                starOffColor:
-                                                    const Color(0xffe7e8ea),
+                                                    const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                                                valueLabelMargin: const EdgeInsets.only(right: 8),
+                                                starOffColor: const Color(0xffe7e8ea),
                                                 starColor: Colors.yellow,
                                               ),
                                               Text(
                                                 rtng,
-                                                style:
-                                                    subtitleTextStyle.copyWith(
+                                                style: subtitleTextStyle.copyWith(
                                                   fontSize: 12,
                                                   color: colorBlack,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Text(
-                                                ' ( ' +
-                                                    card.amountReviews +
-                                                    ' Reviews )',
-                                                style:
-                                                    subtitleTextStyle.copyWith(
+                                                ' ( ' + card.amountReviews + ' Reviews )',
+                                                style: subtitleTextStyle.copyWith(
                                                   color: colorBlack,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -148,8 +131,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                           const SizedBox(
                                             height: 5.0,
                                           ),
-                                          _buildDetailGedung(
-                                              card.nama, card.kota),
+                                          _buildDetailGedung(card.nama, card.kota),
                                           const SizedBox(
                                             height: 5.0,
                                           ),

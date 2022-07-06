@@ -16,12 +16,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> locationItems = [
-    'Bandung',
-    'Jakarta',
-    'Surabaya',
-    'Malang',
-    'Medan',
-    'Bali',
+    'Jakarta Pusat',
+    'Jakarta Barat',
+    'Jakarta Timur',
+    'Jakarta Selatan',
+    'Jakarta Utara',
   ];
 
   @override
@@ -128,14 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      width: 30.0,
-                    ),
-                    Image.asset(
-                      "assets/icons/notification.png",
-                      width: 30,
-                      height: 30,
-                    ),
+                    // const SizedBox(
+                    //   width: 30.0,
+                    // ),
+                    // Image.asset(
+                    //   "assets/icons/notification.png",
+                    //   width: 30,
+                    //   height: 30,
+                    // ),
                     Image.asset(
                       "assets/icons/message.png",
                       width: 45,

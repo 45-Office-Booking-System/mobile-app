@@ -16,6 +16,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Column(
           children: [
             _buildHeader(),
+            _buildBody(),
           ],
         ),
       ),
@@ -152,6 +153,41 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Text(
+                'Nama',
+                style: subtitleTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Email',
+                style: subtitleTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Nama',
+                style: subtitleTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

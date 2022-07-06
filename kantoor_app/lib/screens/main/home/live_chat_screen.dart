@@ -37,12 +37,13 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
         child: Column(
           children: [
             _buildGedungCard(),
+            // _buildChatRoom(),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: Container(
-        height: 80,
+        height: 50,
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         decoration: const BoxDecoration(
@@ -52,18 +53,27 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: 50,
               width: MediaQuery.of(context).size.width * 0.7,
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 16.0),
               decoration: BoxDecoration(
                 color: colorWhite,
                 border: Border.all(color: primaryColor500),
                 borderRadius: BorderRadius.circular(30.0),
               ),
-              child: Text(
-                'Ketikkan Pesan',
-                style: subtitleTextStyle.copyWith(color: colorBlack.withOpacity(0.3)),
+              child: TextFormField(
+                cursorColor: Colors.black,
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                minLines: 1,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintText: "Ketikkan Pesan",
+                ),
+                style: subtitleTextStyle,
               ),
             ),
             Container(
@@ -172,4 +182,13 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
       ),
     );
   }
+
+  // Widget _buildChatRoom() {
+  //   return Stack(
+  //     children: [
+  //       _buildChatListView(),
+
+  //     ],
+  //   );
+  // }
 }

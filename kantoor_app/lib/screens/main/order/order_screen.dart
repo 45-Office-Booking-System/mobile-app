@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kantoor_app/screens/main/order/aktif_screen.dart';
+import 'package:kantoor_app/screens/main/order/selesai_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -8,71 +10,49 @@ class OrderScreen extends StatefulWidget {
   State<OrderScreen> createState() => _OrderScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> {
+class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildAppBar(),
-            // Expanded(
-            //   child: _buildBody(),
-            // ),
-            const SizedBox(
-              height: 240,
+      appBar: AppBar(
+        title: Text(
+          "Order",
+          style: titleTextStyle.copyWith(fontSize: 18),
+        ),
+        backgroundColor: colorWhite,
+        centerTitle: true,
+        elevation: 0.0,
+        bottom: TabBar(
+          controller: _tabController,
+          labelStyle: titleTextStyle.copyWith(fontSize: 16),
+          labelColor: colorBlack,
+          unselectedLabelColor: colorBlack,
+          indicatorColor: colorBlack,
+          tabs: const [
+            Tab(
+              text: "Aktif",
             ),
-            Image.asset('assets/icons/null.png'),
-            const SizedBox(
-              height: 12.0,
+            Tab(
+              text: "Selesai",
             ),
-            Text(
-              'Belum ada booking',
-              style: subtitleTextStyle.copyWith(
-                color: colorBlack.withOpacity(0.4),
-                fontSize: 16,
-              ),
-            )
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildAppBar() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(
-          color: primaryColor500,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          )),
-      child: Text(
-        'Order',
-        style: titleTextStyle.copyWith(
-          fontSize: 20,
-          color: colorWhite,
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          AktifScreen(),
+          SelesaiScreen(),
+        ],
       ),
-    );
-  }
-
-  Widget _buildBody() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 15,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-            leading: const Icon(Icons.list),
-            trailing: const Text(
-              "GFG",
-              style: TextStyle(color: Colors.green, fontSize: 15),
-            ),
-            title: Text("List item $index"));
-      },
     );
   }
 }
