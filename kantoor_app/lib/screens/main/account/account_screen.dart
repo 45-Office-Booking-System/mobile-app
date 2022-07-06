@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kantoor_app/models/user.dart';
 import 'package:kantoor_app/utils/theme.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -11,182 +12,184 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = UserPreferences.myUser;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(),
-            _buildBody(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Stack(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          decoration: const BoxDecoration(
-            color: primaryColor500,
+      backgroundColor: primaryColor500,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 50,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 90, left: 20),
-          child: Row(
+          Row(
             children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  color: primaryColor700,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.person,
-                  color: colorWhite,
-                  size: 35,
-                ),
+              const Padding(
+                padding: EdgeInsets.only(left: 20.0),
               ),
+              _buildProfileImage(user.imgPath),
               const SizedBox(
-                width: 12,
+                height: 10,
               ),
-              Column(
-                children: [
-                  Text(
-                    'Indah Putri',
-                    style: titleTextStyle.copyWith(
-                      fontSize: 24,
-                      color: colorWhite,
-                    ),
-                  ),
-                ],
-              )
+              _buildProfileName(user.nama)
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 160),
-          child: Center(
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
             child: Container(
-              height: 80,
-              width: MediaQuery.of(context).size.width * 0.9,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: Colors.grey[100],
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: colorWhite,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  Text(
-                    'Profil Akun',
-                    style: titleTextStyle.copyWith(fontSize: 20),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.grey[350],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Profil Akun',
+                          style: titleTextStyle.copyWith(
+                            color: colorBlack,
+                            fontSize: 18,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text('Verifikasi Akun'),
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(150, 40),
+                              primary: Colors.yellow,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0))),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Row(
+                            children: const [
+                              Text('Logout '),
+                              Icon(Icons.logout),
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(110, 40),
+                              primary: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0))),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
-                    width: 12.0,
+                    height: 20,
                   ),
-                  Container(
-                    height: 40,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(
-                        20.0,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Edit Profil',
-                          style: subtitleTextStyle.copyWith(
-                            fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildFieldProfile('Nama'),
+                              _buildFieldProfile('Email'),
+                              _buildFieldProfile('Username'),
+                              _buildFieldProfile('Jenis Kelamin'),
+                              _buildFieldProfile('Alamat'),
+                              _buildFieldProfile('Handphone'),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        const Icon(
-                          Icons.edit,
-                          size: 15,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 40,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(
-                        20.0,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Logout',
-                          style: subtitleTextStyle.copyWith(
-                            color: colorWhite,
-                            fontWeight: FontWeight.bold,
+                          Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            width: 2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        const Icon(
-                          Icons.logout,
-                          color: colorWhite,
-                          size: 15,
-                        ),
-                      ],
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildFieldProfile(user.nama),
+                              _buildFieldProfile(user.email),
+                              _buildFieldProfile(user.username),
+                              _buildFieldProfile(user.jnsKelamin),
+                              _buildFieldProfile(user.alamat),
+                              _buildFieldProfile(user.noHP),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildBody() {
+  _buildFieldProfile(data) {
+    return Text(
+      data,
+      style: subtitleTextStyle.copyWith(
+        fontSize: 14,
+        color: colorBlack,
+      ),
+    );
+  }
+
+  _buildProfileName(nama) {
     return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Row(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              Text(
-                'Nama',
-                style: subtitleTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+          Text(
+            nama,
+            style: titleTextStyle.copyWith(
+              fontSize: 18,
+              color: colorBlack,
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Ubah Profil',
+              style: subtitleTextStyle.copyWith(
+                color: colorWhite,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'Email',
-                style: subtitleTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Nama',
-                style: subtitleTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  _buildProfileImage(image) {
+    return CircleAvatar(
+      backgroundColor: Colors.white,
+      radius: 38.0,
+      child: CircleAvatar(
+        radius: 35.0,
+        backgroundImage: NetworkImage(image),
       ),
     );
   }
