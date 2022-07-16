@@ -1,38 +1,51 @@
 class User {
   String id;
-  String nama;
-  String imgPath;
-  String username;
-  String jnsKelamin;
   String email;
-  String noHP;
+  String name;
+  String fullname;
   String alamat;
+  String phone;
   String password;
 
   User({
     required this.id,
-    required this.nama,
-    required this.imgPath,
-    required this.username,
-    required this.jnsKelamin,
     required this.email,
-    required this.noHP,
+    required this.name,
+    required this.fullname,
     required this.alamat,
+    required this.phone,
     required this.password,
   });
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
+        email: json["email"],
+        name: json["name"],
+        fullname: json["fullname"],
+        alamat: json["alamat"],
+        phone: json["phone"],
+        password: json["password"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "name": name,
+        "fullname": fullname,
+        "alamat": alamat,
+        "phone": phone,
+        "password": password,
+      };
 }
 
 class UserPreferences {
   static User myUser = User(
     id: '1',
-    nama: 'Indah Putri',
-    jnsKelamin: 'Perempuan',
-    imgPath:
-        'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
-    username: 'indahptr_',
     email: 'indahhhptr@gmail.com',
+    name: 'Indah',
+    fullname: 'Indah Putri',
     alamat: 'Jl. Ir. H. Juanda No.296, Patokan - Kraksaan',
+    phone: '089627839485',
     password: '123456',
-    noHP: '089627839485',
   );
 }

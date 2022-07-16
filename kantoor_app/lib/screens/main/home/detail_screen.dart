@@ -1,10 +1,16 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:kantoor_app/models/gedung_model.dart';
 import 'package:kantoor_app/screens/main/home/live_chat_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({Key? key}) : super(key: key);
+  final GedungModel gedung;
+  const DetailScreen({
+    Key? key,
+    required this.gedung,
+  }) : super(key: key);
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -36,6 +42,11 @@ class _DetailScreenState extends State<DetailScreen> {
               thickness: 8,
             ),
             _buildPeta(),
+            const Divider(
+              color: primaryColor100,
+              thickness: 8,
+            ),
+            _buildNearby(),
             const Divider(
               color: primaryColor100,
               thickness: 8,
@@ -99,15 +110,18 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget _buildHeader() {
     return Stack(
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 250,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/bg_detail.png'),
-              fit: BoxFit.fill,
-            ),
+        CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            autoPlayInterval: Duration(seconds: 3),
+            autoPlayAnimationDuration: Duration(milliseconds: 1000),
+            autoPlayCurve: Curves.easeInOutQuad,
+            pauseAutoPlayOnTouch: true,
+            viewportFraction: 1,
           ),
+          items: widget.gedung.imageUrl.map((item) {
+            return itemCard(item);
+          }).toList(),
         ),
         SafeArea(
           child: InkWell(
@@ -128,7 +142,7 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 225),
+          margin: const EdgeInsets.only(top: 200),
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           width: MediaQuery.of(context).size.width,
           height: 50,
@@ -173,11 +187,27 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
+  Widget itemCard(String imageUrl) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 250,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 2),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHargaText() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Text(
-        'Rp. 1.000.000,-',
+        'Rp. ${widget.gedung.hargaBooking},-',
         style: titleTextStyle.copyWith(
           fontSize: 20.0,
           color: primaryColor500,
@@ -195,7 +225,7 @@ class _DetailScreenState extends State<DetailScreen> {
           Flexible(
             flex: 8,
             child: Text(
-              'Office Meeting Room Montana Building lt 7',
+              widget.gedung.nama,
               style: titleTextStyle.copyWith(
                 fontSize: 24,
                 color: colorBlack,
@@ -243,7 +273,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Text(
-            'Jakarta',
+            widget.gedung.lokasi,
             style: subtitleTextStyle.copyWith(
               fontSize: 16,
               color: colorBlack,
@@ -255,18 +285,6 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Widget _buildDeskripsiText() {
-    String deskripsi = """
-Fasilitas :
-- AC
-- TV
-- Kulkas
-- Wifi
-
-Free: Konsumsi untuk rapat selama 7 hari
-
-Pembayaran paling lambat 1 minggu sebelum penggunaan office
-
-Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi""";
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -280,7 +298,7 @@ Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi"
             ),
           ),
           Text(
-            deskripsi,
+            widget.gedung.deskripsi,
             style: subtitleTextStyle.copyWith(
               fontSize: 14,
               color: colorBlack,
@@ -306,6 +324,63 @@ Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi"
         ],
       ),
     );
+  }
+
+  Widget _buildNearby() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Fasilitas Terdekat',
+            style: titleTextStyle.copyWith(
+              fontSize: 18.0,
+              color: colorBlack,
+            ),
+          ),
+          const SizedBox(
+            height: 12.0,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ..._itemNearby(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  _itemNearby() {
+    return widget.gedung.nearby.map((item) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.place_outlined,
+              size: 25,
+            ),
+            const SizedBox(
+              width: 12.0,
+            ),
+            Expanded(
+              child: Text(
+                item.nama,
+                style: subtitleTextStyle.copyWith(fontSize: 14),
+              ),
+            ),
+            Text(
+              '${item.jarak.toString()} m',
+              style: subtitleTextStyle.copyWith(fontSize: 14),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildReviewText() {

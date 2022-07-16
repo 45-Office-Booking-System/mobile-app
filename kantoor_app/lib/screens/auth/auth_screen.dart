@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/auth/sign_in_screen.dart';
 import 'package:kantoor_app/screens/auth/sign_up_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
   late TabController tabController;
-  List<String> labels = ['Sing In', 'Sign Up'];
+  List<String> labels = ['Sign In', 'Sign Up'];
 
   @override
   void initState() {
@@ -22,55 +24,61 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
   @override
   void dispose() {
-    tabController.dispose();
     super.dispose();
+    tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildHeader(),
-          Container(
-            margin: const EdgeInsets.all(24.0),
-            width: MediaQuery.of(context).size.width,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: TabBar(
-              labelColor: Colors.white,
-              unselectedLabelColor: primaryColor500,
-              indicatorColor: primaryColor500,
-              indicatorWeight: 2,
-              indicator: BoxDecoration(
-                color: primaryColor500,
+      body: Consumer<AuthProvider>(builder: (context, auth, _) {
+        return Column(
+          children: [
+            _buildHeader(),
+            Container(
+              margin: const EdgeInsets.all(24.0),
+              width: MediaQuery.of(context).size.width,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(30),
               ),
-              controller: tabController,
-              tabs: const [
-                Tab(
-                  text: 'Sign In',
+              child: TabBar(
+                labelColor: Colors.white,
+                unselectedLabelColor: primaryColor500,
+                indicatorColor: primaryColor500,
+                indicatorWeight: 2,
+                indicator: BoxDecoration(
+                  color: primaryColor500,
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                Tab(
-                  text: 'Sign Up',
-                ),
-              ],
+                controller: tabController,
+                tabs: const [
+                  Tab(
+                    text: 'Sign In',
+                  ),
+                  Tab(
+                    text: 'Sign Up',
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: const [
-                SignInScreen(),
-                SignUpScreen(),
-              ],
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  SignInScreen(
+                    setTabController: () {
+                      tabController.animateTo((tabController.index + 1) % 2);
+                    },
+                  ),
+                  const SignUpScreen(),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 

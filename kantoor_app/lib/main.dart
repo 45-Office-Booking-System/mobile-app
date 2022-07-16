@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/onboarding/splash_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/auth_provider.dart';
 import 'package:kantoor_app/viewModels/location_selected_value.dart';
 import 'package:kantoor_app/viewModels/screen_index_value.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LocationSelectedProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthProvider(),
         ),
       ],
       child: MaterialApp(

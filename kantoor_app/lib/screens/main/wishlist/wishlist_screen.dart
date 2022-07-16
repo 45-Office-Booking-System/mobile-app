@@ -15,15 +15,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorWhite,
         title: Text(
-          'Wish List',
-          style: titleTextStyle.copyWith(
-            color: colorBlack,
-            fontSize: 20,
-          ),
+          "Wishlist",
+          style: titleTextStyle.copyWith(fontSize: 18),
         ),
+        backgroundColor: colorWhite,
         centerTitle: true,
+        elevation: 0.0,
       ),
       body: SingleChildScrollView(
         child: Column(

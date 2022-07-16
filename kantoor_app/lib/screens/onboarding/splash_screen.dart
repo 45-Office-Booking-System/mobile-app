@@ -18,20 +18,30 @@ class _SplashScreenState extends State<SplashScreen> {
     var duration = const Duration(seconds: 3);
     final prefs = await SharedPreferences.getInstance();
     final skipOnBoarding = prefs.getBool('skipOnBoarding') ?? false;
-    final skipAuth = prefs.getBool('skipAuth') ?? false;
+    final token = prefs.getString('token');
+    final tempExpiryDate = prefs.getString('expiryDate');
 
     return Timer(duration, () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
           if (skipOnBoarding == false) {
             return const OnboardingScreen();
-          } else if (skipAuth == false) {
-            return const AuthScreen();
+          } else if (token != null && tempExpiryDate != null) {
+            final expiryDate = DateTime.parse(tempExpiryDate);
+            if (expiryDate.isAfter(DateTime.now())) {
+              debugPrint(expiryDate.toString());
+              return const MainScreen();
+            } else {
+              prefs.remove('token');
+              prefs.remove('idUser');
+              prefs.remove('expiryDate');
+              return const AuthScreen();
+            }
           } else {
-            return const MainScreen();
+            return const AuthScreen();
           }
-        },
-      ));
+        }),
+      );
     });
   }
 

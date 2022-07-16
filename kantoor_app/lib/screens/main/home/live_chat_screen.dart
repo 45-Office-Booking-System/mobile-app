@@ -10,6 +10,14 @@ class LiveChatScreen extends StatefulWidget {
 }
 
 class _LiveChatScreenState extends State<LiveChatScreen> {
+  final _chatController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _chatController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,56 +49,93 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        decoration: const BoxDecoration(
-          color: colorWhite,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            width: 12.0,
+          ),
+          Expanded(
+            child: TextField(
+              maxLines: 4,
+              minLines: 1,
+              controller: _chatController,
+              decoration: InputDecoration(
+                label: const Text('Ketik pesan'),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: primaryColor500,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: primaryColor500,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: primaryColor500,
+                  ),
+                ),
+                fillColor: colorWhite,
+                filled: true,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+              ),
+              cursorColor: Colors.green[300],
+              keyboardType: TextInputType.multiline,
+            ),
+          ),
+          const SizedBox(
+            width: 12.0,
+          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width * 0.7,
+          //   alignment: Alignment.centerLeft,
+          //   decoration: BoxDecoration(
+          //     color: colorWhite,
+          //     border: Border.all(color: primaryColor500),
+          //     borderRadius: BorderRadius.circular(30.0),
+          //   ),
+          //   child: TextFormField(
+          //     cursorColor: Colors.black,
+          //     keyboardType: TextInputType.multiline,
+          //     maxLines: 3,
+          //     minLines: 1,
+          //     decoration: const InputDecoration(
+          //       border: InputBorder.none,
+          //       focusedBorder: InputBorder.none,
+          //       enabledBorder: InputBorder.none,
+          //       errorBorder: InputBorder.none,
+          //       disabledBorder: InputBorder.none,
+          //       hintText: "Ketikkan Pesan",
+          //     ),
+          //     style: subtitleTextStyle,
+          //   ),
+          // ),
+          Container(
+            decoration: const BoxDecoration(
+              color: primaryColor500,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.send,
                 color: colorWhite,
-                border: Border.all(color: primaryColor500),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              child: TextFormField(
-                cursorColor: Colors.black,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                minLines: 1,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  hintText: "Ketikkan Pesan",
-                ),
-                style: subtitleTextStyle,
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                color: primaryColor500,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.send,
-                  color: colorWhite,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            width: 12.0,
+          ),
+        ],
       ),
     );
   }

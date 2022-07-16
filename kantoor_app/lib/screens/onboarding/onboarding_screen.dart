@@ -58,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   child: Text(
                     'Get Started',
-                    style: subtitleTextStyle.copyWith(fontSize: 14),
+                    style: subtitleTextStyle.copyWith(fontSize: 16, color: colorWhite),
                   ),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

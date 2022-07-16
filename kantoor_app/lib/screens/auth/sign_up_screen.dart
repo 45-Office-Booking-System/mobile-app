@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kantoor_app/models/register.dart';
+import 'package:kantoor_app/screens/auth/auth_screen.dart';
 import 'package:kantoor_app/screens/auth/widgets/auth_button.dart';
 import 'package:kantoor_app/screens/auth/widgets/auth_textfield.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -12,25 +16,23 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _namaController = TextEditingController();
-  final _tanggalLahirController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _fullnameController = TextEditingController();
   final _alamatController = TextEditingController();
-  final _nomorController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _passwordConfirmController = TextEditingController();
   bool isHiddenPassword = true;
   bool isHiddenPasswordConfirm = true;
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _namaController.dispose();
-    _tanggalLahirController.dispose();
+    _emailController.dispose();
+    _nameController.dispose();
+    _fullnameController.dispose();
     _alamatController.dispose();
-    _nomorController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
-    _passwordConfirmController.dispose();
     super.dispose();
   }
 
@@ -40,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
           20,
-          0,
+          20,
           20,
           20,
         ),
@@ -52,30 +54,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 8,
               ),
               textField(
-                text: 'Username',
-                icon: Icons.person,
-                isPasswordType: false,
-                controller: _usernameController,
-                passwordView: false,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              textField(
-                text: 'Nama Lengkap',
+                text: 'Email',
                 icon: Icons.email,
                 isPasswordType: false,
-                controller: _namaController,
+                isEmailType: true,
+                controller: _emailController,
                 passwordView: false,
               ),
               const SizedBox(
                 height: 8,
               ),
               textField(
-                text: 'Tanggal Lahir',
-                icon: Icons.date_range,
+                text: 'Name',
+                icon: Icons.person,
                 isPasswordType: false,
-                controller: _tanggalLahirController,
+                isEmailType: false,
+                controller: _nameController,
+                passwordView: false,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              textField(
+                text: 'Fullname',
+                icon: Icons.person,
+                isPasswordType: false,
+                isEmailType: false,
+                controller: _fullnameController,
                 passwordView: false,
               ),
               const SizedBox(
@@ -85,18 +90,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 text: 'Alamat',
                 icon: Icons.location_city_outlined,
                 isPasswordType: false,
+                isEmailType: false,
                 controller: _alamatController,
                 passwordView: false,
               ),
               const SizedBox(
                 height: 8,
               ),
-              textField(
-                text: 'No. Handphone Aktif',
-                icon: Icons.phone,
-                isPasswordType: false,
-                controller: _nomorController,
-                passwordView: false,
+              TextFormField(
+                controller: _phoneController,
+                cursorColor: Colors.green[300],
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.phone,
+                    color: primaryColor500,
+                  ),
+                  labelText: 'Phone',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: const BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                ),
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Form tidak boleh kosong';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(
                 height: 8,
@@ -105,9 +131,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 text: 'Password',
                 icon: Icons.key,
                 isPasswordType: true,
+                isEmailType: false,
                 controller: _passwordController,
                 passwordView: isHiddenPassword,
                 suffixIcon: IconButton(
+                  splashRadius: 0.1,
                   onPressed: () {
                     setState(() {
                       isHiddenPassword = !isHiddenPassword;
@@ -127,36 +155,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 8,
               ),
-              textField(
-                text: 'Konfirmasi Password',
-                icon: Icons.key_outlined,
-                isPasswordType: true,
-                controller: _passwordConfirmController,
-                passwordView: isHiddenPasswordConfirm,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isHiddenPasswordConfirm = !isHiddenPasswordConfirm;
-                    });
-                  },
-                  icon: isHiddenPasswordConfirm
-                      ? Icon(
-                          Icons.visibility,
-                          color: colorBlack.withOpacity(0.3),
-                        )
-                      : Icon(
-                          Icons.visibility_off,
-                          color: colorBlack.withOpacity(0.3),
-                        ),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              authButton(
-                context: context,
-                isLogin: false,
-                onTap: () {},
+              Consumer<AuthProvider>(
+                builder: (context, auth, _) {
+                  final isLoading = auth.state == AuthState.loading;
+                  final isError = auth.state == AuthState.error;
+
+                  if (isLoading) {
+                    return const Padding(
+                      padding: EdgeInsets.all(27.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+
+                  if (isError) {
+                    Future.delayed(
+                      Duration.zero,
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${auth.errorMessage}")),
+                        );
+                        auth.changeState(AuthState.none);
+                      },
+                    );
+                  }
+
+                  return authButton(
+                    context: context,
+                    isLogin: false,
+                    onTap: () async {
+                      if (!formKey.currentState!.validate()) return;
+
+                      final Register register = Register(
+                        email: _emailController.text.trim(),
+                        name: _nameController.text.trim(),
+                        fullname: _fullnameController.text.trim(),
+                        alamat: _alamatController.text.trim(),
+                        phone: _phoneController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      );
+
+                      final status = await auth.register(register: register);
+
+                      debugPrint(status.toString());
+
+                      if (status != null) {
+                        if (status == "Register Successfully") {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AuthScreen(),
+                            ),
+                          );
+                          Future.delayed(
+                            Duration.zero,
+                            () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(status)),
+                              );
+                            },
+                          );
+                        }
+                      }
+                    },
+                  );
+                },
               ),
             ],
           ),

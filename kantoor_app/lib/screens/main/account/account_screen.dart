@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/models/user.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../auth/auth_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -10,128 +13,161 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  final user = UserPreferences.myUser;
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
     return Scaffold(
-      backgroundColor: primaryColor500,
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildHeader(),
+            const SizedBox(
+              height: 12.0,
+            ),
+            _buildCardProfile('Fullname', user.fullname),
+            _buildCardProfile('Email', user.email),
+            _buildCardProfile('Alamat', user.alamat),
+            _buildCardProfile('Phone', user.phone),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Stack(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 220,
+          decoration: const BoxDecoration(
+            color: primaryColor500,
           ),
-          Row(
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 80, left: 20),
+          child: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20.0),
+              Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                  color: primaryColor700,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: colorWhite, width: 2.0),
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              _buildProfileImage(user.imgPath),
               const SizedBox(
-                height: 10,
+                width: 12,
               ),
-              _buildProfileName(user.nama)
+              Column(
+                children: [
+                  Text(
+                    user.name,
+                    style: titleTextStyle.copyWith(
+                      fontSize: 24,
+                      color: colorWhite,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 180),
+          child: Center(
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: colorWhite,
+              height: 80,
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.grey[100],
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(
-                    height: 10,
+                  Text(
+                    'Profil Akun',
+                    style: titleTextStyle.copyWith(fontSize: 20),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 30,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.grey[350],
-                    ),
+                  const SizedBox(
+                    width: 12.0,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          'Profil Akun',
-                          style: titleTextStyle.copyWith(
-                            color: colorBlack,
-                            fontSize: 18,
+                          'Edit Profil',
+                          style: subtitleTextStyle.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text('Verifikasi Akun'),
-                          style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(150, 40),
-                              primary: Colors.yellow,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0))),
+                        const SizedBox(
+                          width: 8.0,
                         ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Row(
-                            children: const [
-                              Text('Logout '),
-                              Icon(Icons.logout),
-                            ],
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(110, 40),
-                              primary: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0))),
+                        const Icon(
+                          Icons.edit,
+                          size: 15,
+                          color: colorBlack,
                         ),
                       ],
                     ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildFieldProfile('Nama'),
-                              _buildFieldProfile('Email'),
-                              _buildFieldProfile('Username'),
-                              _buildFieldProfile('Jenis Kelamin'),
-                              _buildFieldProfile('Alamat'),
-                              _buildFieldProfile('Handphone'),
-                            ],
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AuthScreen(),
+                        ),
+                        (route) => false,
+                      );
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.remove('idUser');
+                      prefs.remove('token');
+                      prefs.remove('expiryDate');
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Logout',
+                          style: subtitleTextStyle.copyWith(
+                            color: colorWhite,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 4,
-                            width: 2,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildFieldProfile(user.nama),
-                              _buildFieldProfile(user.email),
-                              _buildFieldProfile(user.username),
-                              _buildFieldProfile(user.jnsKelamin),
-                              _buildFieldProfile(user.alamat),
-                              _buildFieldProfile(user.noHP),
-                            ],
-                          ),
-                        ],
+                        ),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        const Icon(
+                          Icons.logout,
+                          color: colorWhite,
+                          size: 15,
+                        ),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
@@ -139,57 +175,49 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  _buildCardProfile(key, value) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Card(
+        margin: const EdgeInsets.all(12.0),
+        elevation: 2.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildKeyProfile(key),
+              _buildValueProfile(value),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  _buildFieldProfile(data) {
+  _buildKeyProfile(text) {
     return Text(
-      data,
+      text,
+      style: titleTextStyle.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  _buildValueProfile(text) {
+    return Text(
+      text,
       style: subtitleTextStyle.copyWith(
-        fontSize: 14,
-        color: colorBlack,
-      ),
-    );
-  }
-
-  _buildProfileName(nama) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            nama,
-            style: titleTextStyle.copyWith(
-              fontSize: 18,
-              color: colorBlack,
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              'Ubah Profil',
-              style: subtitleTextStyle.copyWith(
-                color: colorWhite,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildProfileImage(image) {
-    return CircleAvatar(
-      backgroundColor: Colors.white,
-      radius: 38.0,
-      child: CircleAvatar(
-        radius: 35.0,
-        backgroundImage: NetworkImage(image),
+        fontSize: 16,
       ),
     );
   }

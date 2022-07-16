@@ -1,17 +1,29 @@
+import 'package:kantoor_app/models/jenis_gedung.dart';
+import 'package:kantoor_app/models/nearby.dart';
+import 'package:kantoor_app/models/review.dart';
+
 class Gedung {
-  String id;
-  String idReview;
+  int id;
   String nama;
-  String harga;
-  String lokasi;
-  String deskripsi;
+  String location;
+  String price;
+  int latitude;
+  int longitude;
+  String description;
+  List<Review> reviews;
+  List<Nearby> nearby;
+  List<JenisGedung> jenisGedung;
 
   Gedung({
     required this.id,
-    required this.idReview,
     required this.nama,
-    required this.harga,
-    required this.lokasi,
-    required this.deskripsi,
+    required this.location,
+    required this.price,
+    required this.latitude,
+    required this.longitude,
+    required this.description,
+    required this.reviews,
+    required this.nearby,
+    required this.jenisGedung,
   });
 }
