@@ -1,13 +1,16 @@
+import 'package:kantoor_app/models/gedung_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Review {
   late String id;
+  // GedungModel namaGedung;
   String namaReviewer;
-  String rating;
+  double rating;
   String teks;
   String idGedung;
 
   Review({
+    // required this.namaGedung,
     required this.namaReviewer,
     required this.rating,
     required this.teks,
@@ -16,3 +19,13 @@ class Review {
     id = const Uuid().v1();
   }
 }
+
+List<Review> reviews = [
+  Review(
+    // namaGedung: ,
+    namaReviewer: "Anggi",
+    rating: 4.5,
+    teks: "Good Mantap",
+    idGedung: "sdfsdf",
+  )
+];

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:kantoor_app/models/gedung_model.dart';
 import 'package:kantoor_app/screens/main/home/detail_screen.dart';
+import 'package:kantoor_app/screens/main/home/history_chat_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 import 'package:kantoor_app/viewModels/location_selected_value.dart';
 import 'package:provider/provider.dart';
@@ -135,7 +136,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     //   height: 45,
                     // ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HistoryChat(),
+                          ),
+                        );
+                      },
                       icon: const Icon(
                         Icons.message_rounded,
                         color: colorWhite,
@@ -165,7 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -190,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.27),
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.27),
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           width: MediaQuery.of(context).size.width,
           height: 80,
@@ -266,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCarouselSlider() {
     return SizedBox(
-      height: 250,
+      height: 275,
       child: CarouselSlider(
         items: listGedung.map((item) {
           return Builder(
@@ -278,7 +288,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return DetailScreen(gedung: item);
                       },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         const begin = Offset(0.0, 1.0);
                         const end = Offset.zero;
                         final tween = Tween(begin: begin, end: end);
@@ -322,7 +333,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       maxValue: 5,
                       starSpacing: 2,
                       animationDuration: const Duration(milliseconds: 1000),
-                      valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                      valueLabelPadding: const EdgeInsets.symmetric(
+                          vertical: 1, horizontal: 8),
                       valueLabelMargin: const EdgeInsets.only(right: 8),
                       starOffColor: const Color(0xffe7e8ea),
                       starColor: Colors.yellow,
@@ -377,11 +389,18 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 50,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: ['Auditorium', 'Gedung Serbaguna', 'Hotel', 'Convention Hall', 'Kantor'].map((item) {
+        children: [
+          'Auditorium',
+          'Gedung Serbaguna',
+          'Hotel',
+          'Convention Hall',
+          'Kantor'
+        ].map((item) {
           return Builder(builder: (BuildContext context) {
             return Container(
               margin: const EdgeInsets.only(left: 12.0),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               decoration: BoxDecoration(
                 color: colorWhite,
                 border: Border.all(color: primaryColor500),
@@ -414,7 +433,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   pageBuilder: (context, animation, secondaryAnimation) {
                     return DetailScreen(gedung: item);
                   },
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
                     const begin = Offset(0.0, 1.0);
                     const end = Offset.zero;
                     final tween = Tween(begin: begin, end: end);
@@ -429,7 +449,8 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -460,7 +481,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxValue: 5,
                     starSpacing: 2,
                     animationDuration: const Duration(milliseconds: 1000),
-                    valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                    valueLabelPadding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
                     valueLabelMargin: const EdgeInsets.only(right: 8),
                     starOffColor: const Color(0xffe7e8ea),
                     starColor: Colors.yellow,

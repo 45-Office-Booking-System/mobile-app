@@ -122,8 +122,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       ],
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow,
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      // backgroundColor: Colors.yellow,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -138,7 +139,8 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         (route) => false,
                       );
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
                       prefs.remove('idUser');
                       prefs.remove('token');
                       prefs.remove('expiryDate');
@@ -164,8 +166,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       ],
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      // backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
