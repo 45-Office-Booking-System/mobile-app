@@ -29,22 +29,22 @@ environment:
 dependencies:
   carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
-  dio: ^4.0.6  
+  dio: ^4.0.6
   dropdown_button2: ^1.6.2
-  file_picker: ^3.0.4
   flutter:
     sdk: flutter
   flutter_rating_stars: ^1.0.3+4
   google_fonts: ^3.0.1
+  google_maps_flutter: ^2.1.8
+  http: ^0.13.4
   image_picker: ^0.8.5+3
+  jumping_dot: ^0.0.4
   provider: ^6.0.3
   shared_preferences: ^2.0.15
-  smooth_star_rating: ^1.1.1
   uuid: ^3.0.6
-  
 
 dev_dependencies:
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
 

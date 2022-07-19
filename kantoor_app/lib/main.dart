@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kantoor_app/screens/onboarding/splash_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 import 'package:kantoor_app/viewModels/auth_provider.dart';
+import 'package:kantoor_app/viewModels/gedung_provider.dart';
+import 'package:kantoor_app/viewModels/livechat_provider.dart';
 import 'package:kantoor_app/viewModels/location_selected_value.dart';
 import 'package:kantoor_app/viewModels/screen_index_value.dart';
+import 'package:kantoor_app/viewModels/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -25,6 +28,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GedungProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LivechatProvider(),
         ),
       ],
       child: MaterialApp(

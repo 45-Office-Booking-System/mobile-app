@@ -202,6 +202,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       if (status != null) {
                         if (status == "Register Successfully") {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

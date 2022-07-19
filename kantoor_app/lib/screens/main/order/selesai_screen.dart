@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kantoor_app/screens/main/order/review/review_screen.dart';
+import 'package:kantoor_app/screens/main/order/review_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 
 class SelesaiScreen extends StatefulWidget {
@@ -87,8 +87,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
           width: MediaQuery.of(context).size.width,
           color: Colors.grey[100],
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 3.0, left: 10.0, right: 10.0, bottom: 3.0),
+            padding: const EdgeInsets.only(top: 3.0, left: 10.0, right: 10.0, bottom: 3.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -218,8 +217,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                 ),
                 TextButton(
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(primaryColor500),
+                    backgroundColor: MaterialStateProperty.all<Color>(primaryColor500),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

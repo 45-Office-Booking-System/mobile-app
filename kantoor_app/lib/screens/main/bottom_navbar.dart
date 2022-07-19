@@ -31,10 +31,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _navBarItems = [];
+    List<Widget> navBarItems = [];
 
     for (int i = 0; i < 4; i++) {
-      _navBarItems.add(
+      navBarItems.add(
         bottomNavBarItem(
           _selectedItemIcon[i],
           _unselectedItemIcon[i],
@@ -51,7 +51,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: _navBarItems,
+        children: navBarItems,
       ),
     );
   }

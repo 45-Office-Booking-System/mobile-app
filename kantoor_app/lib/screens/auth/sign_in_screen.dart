@@ -201,6 +201,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       final token = prefs.getString('token') ?? "";
 
                       if (token.isNotEmpty) {
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

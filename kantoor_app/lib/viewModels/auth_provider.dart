@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:kantoor_app/models/register.dart';
-import 'package:kantoor_app/services/api_service.dart';
+import 'package:kantoor_app/services/auth_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthState { none, loading, error }

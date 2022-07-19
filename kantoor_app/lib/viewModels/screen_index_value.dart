@@ -8,4 +8,9 @@ class ScreenIndexProvider extends ChangeNotifier {
     _index = index;
     notifyListeners();
   }
+
+  void resetIndex() {
+    _index = 0;
+    notifyListeners();
+  }
 }

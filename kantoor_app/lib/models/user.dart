@@ -1,46 +1,48 @@
 class User {
-  String id;
+  int id;
   String email;
+  String password;
   String name;
   String fullname;
   String alamat;
   String phone;
-  String password;
 
   User({
     required this.id,
     required this.email,
+    required this.password,
     required this.name,
     required this.fullname,
     required this.alamat,
     required this.phone,
-    required this.password,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        email: json["email"],
-        name: json["name"],
-        fullname: json["fullname"],
-        alamat: json["alamat"],
-        phone: json["phone"],
-        password: json["password"],
+        id: json['id'],
+        email: json['email'],
+        password: json['password'],
+        name: json['name'],
+        fullname: json['fullname'],
+        alamat: json['alamat'],
+        phone: json['phone'],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "email": email,
-        "name": name,
-        "fullname": fullname,
-        "alamat": alamat,
-        "phone": phone,
-        "password": password,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['password'] = password;
+    data['name'] = name;
+    data['fullname'] = fullname;
+    data['alamat'] = alamat;
+    data['phone'] = phone;
+    return data;
+  }
 }
 
 class UserPreferences {
   static User myUser = User(
-    id: '1',
+    id: 1,
     email: 'indahhhptr@gmail.com',
     name: 'Indah Putri',
     fullname: 'Indah Putri',

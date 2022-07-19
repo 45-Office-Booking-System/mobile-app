@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:kantoor_app/models/gedung.dart';
+import 'package:kantoor_app/models/message.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/livechat_provider.dart';
+import 'package:provider/provider.dart';
 
 class LiveChatScreen extends StatefulWidget {
-  const LiveChatScreen({Key? key}) : super(key: key);
+  Data gedung;
+  LiveChatScreen({
+    Key? key,
+    required this.gedung,
+  }) : super(key: key);
 
   @override
   State<LiveChatScreen> createState() => _LiveChatScreenState();
@@ -20,6 +28,8 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final livechatApi = Provider.of<LivechatProvider>(context, listen: false).getAllMessages();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -41,11 +51,11 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+        padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 80.0),
         child: Column(
           children: [
             _buildGedungCard(),
-            // _buildChatRoom(),
+            _buildMessageList(livechatApi),
           ],
         ),
       ),
@@ -62,7 +72,8 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
               minLines: 1,
               controller: _chatController,
               decoration: InputDecoration(
-                label: const Text('Ketik pesan'),
+                hintText: 'Ketik pesan',
+                hintStyle: subtitleTextStyle.copyWith(fontSize: 15),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: const BorderSide(
@@ -86,7 +97,6 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
                 ),
                 fillColor: colorWhite,
                 filled: true,
-                floatingLabelBehavior: FloatingLabelBehavior.never,
               ),
               cursorColor: Colors.green[300],
               keyboardType: TextInputType.multiline,
@@ -204,7 +214,7 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
                     ],
                   ),
                   Text(
-                    'Office Meeting Room Montana Building lt 7',
+                    widget.gedung.name!,
                     style: titleTextStyle.copyWith(
                       fontSize: 16,
                       color: colorBlack,
@@ -213,7 +223,7 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
                     maxLines: 2,
                   ),
                   Text(
-                    'Rp. 1.000.000,-',
+                    'Rp. ${widget.gedung.price}',
                     style: titleTextStyle.copyWith(
                       fontSize: 20.0,
                       color: primaryColor500,
@@ -228,12 +238,99 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
     );
   }
 
-  // Widget _buildChatRoom() {
-  //   return Stack(
-  //     children: [
-  //       _buildChatListView(),
+  _buildMessageList(Stream<List<Messages>> livechatApi) {
+    return StreamBuilder<List<Messages>>(
+      stream: livechatApi,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const AlertDialog(
+            title: Text('Connection Timed Out'),
+          );
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Expanded(
+                child: Center(
+              child: CircularProgressIndicator(),
+            ));
+          case ConnectionState.active:
+            return Expanded(
+              child: ListView.builder(
+                reverse: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final data = snapshot.data!.reversed.toList();
 
-  //     ],
-  //   );
-  // }
+                  if (data[index].body == '') {
+                    return const SizedBox();
+                  }
+
+                  if (data[index].userName == 'Admin' || data[index].userName == 'admin') {
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 250),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                          decoration: BoxDecoration(
+                            color: primaryColor100,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                data[index].body,
+                                style: subtitleTextStyle.copyWith(fontSize: 14),
+                              ),
+                              Text(
+                                data[index].timestamp,
+                                style: subtitleTextStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 250),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                          decoration: BoxDecoration(
+                            color: primaryColor500,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                data[index].body,
+                                style: subtitleTextStyle.copyWith(fontSize: 15),
+                              ),
+                              Text(
+                                data[index].timestamp,
+                                style: subtitleTextStyle.copyWith(fontSize: 10),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            );
+          default:
+            return const SizedBox();
+        }
+      },
+    );
+  }
 }

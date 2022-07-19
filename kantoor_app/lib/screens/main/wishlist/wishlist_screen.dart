@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kantoor_app/models/gedung_model.dart';
-import 'package:kantoor_app/models/wishlist.dart';
-import 'package:kantoor_app/screens/main/home/detail_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 
@@ -41,29 +39,28 @@ class _WishlistScreenState extends State<WishlistScreen> {
         builder: (BuildContext context) {
           return InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return DetailScreen(gedung: item);
-                  },
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(0.0, 1.0);
-                    const end = Offset.zero;
-                    final tween = Tween(begin: begin, end: end);
-                    final offsetAnimation = animation.drive(tween);
-                    return SlideTransition(
-                      position: offsetAnimation,
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 500),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   PageRouteBuilder(
+              //     pageBuilder: (context, animation, secondaryAnimation) {
+              //       // return DetailScreen(id: item);
+              //     },
+              //     transitionsBuilder:
+              //         (context, animation, secondaryAnimation, child) {
+              //       const begin = Offset(0.0, 1.0);
+              //       const end = Offset.zero;
+              //       final tween = Tween(begin: begin, end: end);
+              //       final offsetAnimation = animation.drive(tween);
+              //       return SlideTransition(
+              //         position: offsetAnimation,
+              //         child: child,
+              //       );
+              //     },
+              //     transitionDuration: const Duration(milliseconds: 500),
+              //   ),
+              // );
             },
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -94,8 +91,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     maxValue: 5,
                     starSpacing: 2,
                     animationDuration: const Duration(milliseconds: 1000),
-                    valueLabelPadding:
-                        const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                    valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
                     valueLabelMargin: const EdgeInsets.only(right: 8),
                     starOffColor: const Color(0xffe7e8ea),
                     starColor: Colors.yellow,

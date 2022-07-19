@@ -6,7 +6,14 @@ class Nearby {
   String? latitude;
   String? longitude;
 
-  Nearby({this.id, this.namefacilities, this.jenis, this.jarak, this.latitude, this.longitude});
+  Nearby({
+    this.id,
+    this.namefacilities,
+    this.jenis,
+    this.jarak,
+    this.latitude,
+    this.longitude,
+  });
 
   Nearby.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -18,13 +25,13 @@ class Nearby {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['namefacilities'] = this.namefacilities;
-    data['jenis'] = this.jenis;
-    data['jarak'] = this.jarak;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['namefacilities'] = namefacilities;
+    data['jenis'] = jenis;
+    data['jarak'] = jarak;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

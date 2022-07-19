@@ -13,7 +13,7 @@ class ApiService {
 
     try {
       Response response = await _dio.post(
-        _baseUrl + 'login',
+        '${_baseUrl}login',
         data: {"email": email, "password": password},
       );
 
@@ -44,7 +44,7 @@ class ApiService {
 
     try {
       Response response = await _dio.post(
-        _baseUrl + 'register',
+        '${_baseUrl}register',
         data: data,
       );
 

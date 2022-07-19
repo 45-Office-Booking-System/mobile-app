@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 import 'package:kantoor_app/models/user.dart';
 import 'package:kantoor_app/screens/main/account/edit_account_screen.dart';
 import 'package:kantoor_app/screens/main/account/kebijakan_privasi_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../auth/auth_screen.dart';
@@ -22,16 +25,24 @@ class _AccountScreenState extends State<AccountScreen> {
 
   File? image;
   Future getImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? imagePicked =
-        await _picker.pickImage(source: ImageSource.gallery);
-    image = File(imagePicked!.path);
-    setState(() {});
+    final ImagePicker picker = ImagePicker();
+    final XFile? imagePicked = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      image = File(imagePicked!.path);
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('idUser') ?? 0;
+      // ignore: use_build_context_synchronously
+      final user = Provider.of<UserProvider>(context, listen: false);
+      user.getUser(userId);
+    });
   }
 
   @override
@@ -47,6 +58,7 @@ class _AccountScreenState extends State<AccountScreen> {
             _buildProfile(Icons.people, "Nama", user.name),
             _buildProfile(Icons.email, "Email", user.email),
             _buildProfile(Icons.smartphone, "Handphone", user.phone),
+            _buildProfile(Icons.location_on, "Alamat", user.alamat),
             const SizedBox(
               height: 15.0,
             ),
@@ -57,12 +69,9 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(
               height: 15.0,
             ),
-            _buildCardSetting(Icons.perm_device_info_rounded,
-                "Syarat dan Ketentuan", const KebijakanPrivasi()),
-            _buildCardSetting(Icons.privacy_tip_outlined, "Kebijakan Privasi",
-                const KebijakanPrivasi()),
-            _buildCardSetting(Icons.screen_share_outlined, "Bagikan",
-                const KebijakanPrivasi()),
+            _buildCardSetting(Icons.perm_device_info_rounded, "Syarat dan Ketentuan", const KebijakanPrivasi()),
+            _buildCardSetting(Icons.privacy_tip_outlined, "Kebijakan Privasi", const KebijakanPrivasi()),
+            _buildCardSetting(Icons.screen_share_outlined, "Bagikan", const KebijakanPrivasi()),
           ],
         ),
       ),
@@ -78,8 +87,7 @@ class _AccountScreenState extends State<AccountScreen> {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  primaryColor500.withOpacity(0.5), BlendMode.dstATop),
+              colorFilter: ColorFilter.mode(primaryColor500.withOpacity(0.5), BlendMode.dstATop),
               image: const AssetImage("assets/images/kantor2.jpg"),
             ),
           ),
@@ -98,10 +106,12 @@ class _AccountScreenState extends State<AccountScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(color: colorWhite, width: 2.0),
-                            ),
-                            child: Image.file(
-                              image!,
-                              fit: BoxFit.cover,
+                              image: DecorationImage(
+                                image: FileImage(
+                                  image!,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           )
                         : Container(
@@ -133,8 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               shape: BoxShape.circle,
                               border: Border.all(
                                 width: 2,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                               ),
                               color: primaryColor500),
                           child: const Icon(
@@ -147,16 +156,52 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
-                Text(
-                  user.name,
-                  style: titleTextStyle.copyWith(
-                    fontSize: 16,
-                    color: colorWhite,
-                  ),
-                ),
+                Consumer<UserProvider>(builder: (context, manager, _) {
+                  final isLoading = manager.userState == UserState.loading;
+                  final isError = manager.userState == UserState.error;
+                  final value = manager.user;
+
+                  if (isLoading) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: JumpingDots(
+                        innerPadding: 1,
+                        radius: 8,
+                        color: colorWhite,
+                        numberOfDots: 3,
+                        animationDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }
+
+                  if (isError) {
+                    return Text(
+                      'No internet',
+                      style: titleTextStyle.copyWith(
+                        fontSize: 24,
+                        color: colorWhite,
+                      ),
+                    );
+                  }
+
+                  if (value != null) {
+                    return Text(
+                      value.name,
+                      style: titleTextStyle.copyWith(
+                        fontSize: 24,
+                        color: colorWhite,
+                      ),
+                    );
+                  } else {
+                    return Text(
+                      'Null',
+                      style: titleTextStyle.copyWith(
+                        fontSize: 24,
+                        color: colorWhite,
+                      ),
+                    );
+                  }
+                }),
               ],
             ),
           ),
@@ -168,16 +213,14 @@ class _AccountScreenState extends State<AccountScreen> {
               height: 70,
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: Colors.grey[50],
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0.0, 0.3),
-                      blurRadius: 5.0,
-                    ),
-                  ]),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.grey[50], boxShadow: const [
+                BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(0.0, 0.3),
+                  blurRadius: 5.0,
+                ),
+              ]),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -197,6 +240,13 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor500,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                     child: Row(
                       children: [
                         Text(
@@ -216,14 +266,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor500,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -234,12 +276,18 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         (route) => false,
                       );
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.remove('idUser');
                       prefs.remove('token');
                       prefs.remove('expiryDate');
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -259,14 +307,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           size: 15,
                         ),
                       ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
                     ),
                   ),
                 ],
@@ -303,13 +343,81 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ],
           ),
-          Text(
-            value,
-            style: subtitleTextStyle.copyWith(
-              fontSize: 12,
-              color: colorBlack,
-            ),
+          const SizedBox(
+            width: 50,
           ),
+          Consumer<UserProvider>(builder: (context, manager, _) {
+            final isLoading = manager.userState == UserState.loading;
+            final isError = manager.userState == UserState.error;
+            final value = manager.user;
+
+            if (isLoading) {
+              return const JumpingDots(
+                color: primaryColor500,
+                radius: 10,
+                numberOfDots: 3,
+                animationDuration: Duration(milliseconds: 200),
+              );
+            }
+
+            if (isError) {
+              return Text(
+                'Null',
+                style: titleTextStyle.copyWith(
+                  fontSize: 24,
+                  color: colorWhite,
+                ),
+              );
+            }
+
+            if (value != null) {
+              if (key == "Nama") {
+                return Text(
+                  value.name,
+                  style: subtitleTextStyle.copyWith(
+                    fontSize: 12,
+                    color: colorBlack,
+                  ),
+                );
+              } else if (key == "Email") {
+                return Text(
+                  value.email,
+                  style: subtitleTextStyle.copyWith(
+                    fontSize: 12,
+                    color: colorBlack,
+                  ),
+                );
+              } else if (key == "Handphone") {
+                return Text(
+                  value.phone,
+                  style: subtitleTextStyle.copyWith(
+                    fontSize: 12,
+                    color: colorBlack,
+                  ),
+                );
+              } else {
+                return Expanded(
+                  child: Text(
+                    value.alamat,
+                    style: subtitleTextStyle.copyWith(
+                      fontSize: 12,
+                      color: colorBlack,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                  ),
+                );
+              }
+            } else {
+              return Text(
+                'Null',
+                style: titleTextStyle.copyWith(
+                  fontSize: 24,
+                  color: colorWhite,
+                ),
+              );
+            }
+          }),
         ],
       ),
     );
@@ -342,8 +450,7 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => func));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => func));
             },
             child: const Icon(
               Icons.arrow_forward_ios_rounded,

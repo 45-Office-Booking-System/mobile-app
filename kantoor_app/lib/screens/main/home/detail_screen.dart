@@ -1,66 +1,123 @@
+import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
-import 'package:kantoor_app/models/gedung_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kantoor_app/models/gedung.dart';
 import 'package:kantoor_app/screens/main/home/live_chat_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/gedung_provider.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
-  final GedungModel gedung;
+  final int id;
   const DetailScreen({
     Key? key,
-    required this.gedung,
+    required this.id,
   }) : super(key: key);
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClientMixin {
+  Completer<GoogleMapController> _controller = Completer();
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final gedung = Provider.of<GedungProvider>(context, listen: false);
+      gedung.getGedungById(widget.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            _buildHargaText(),
-            _buildTitleText(),
-            const Divider(
-              color: primaryColor100,
-              thickness: 8,
-            ),
-            _buildLokasiText(),
-            const Divider(
-              color: primaryColor100,
-              thickness: 8,
-            ),
-            _buildDeskripsiText(),
-            const Divider(
-              color: primaryColor100,
-              thickness: 8,
-            ),
-            _buildPeta(),
-            const Divider(
-              color: primaryColor100,
-              thickness: 8,
-            ),
-            _buildNearby(),
-            const Divider(
-              color: primaryColor100,
-              thickness: 8,
-            ),
-            _buildReviewText(),
-          ],
-        ),
+      body: Consumer<GedungProvider>(
+        builder: (context, manager, _) {
+          final isLoading = manager.state == GedungState.loading;
+          final isError = manager.state == GedungState.error;
+          final gedung = manager.gedungById?.data?[0];
+
+          if (isLoading) {
+            return const Padding(
+              padding: EdgeInsets.all(27.0),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          if (isError) {
+            return Center(
+              child: Text(
+                'Tidak dapat memuat data',
+                style: subtitleTextStyle,
+              ),
+            );
+          }
+
+          if (gedung != null) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(gedung),
+                  _buildHargaText(gedung),
+                  _buildTitleText(gedung),
+                  const Divider(
+                    color: primaryColor100,
+                    thickness: 8,
+                  ),
+                  _buildLokasiText(gedung),
+                  const Divider(
+                    color: primaryColor100,
+                    thickness: 8,
+                  ),
+                  _buildDeskripsiText(gedung),
+                  const Divider(
+                    color: primaryColor100,
+                    thickness: 8,
+                  ),
+                  _buildPeta(gedung),
+                  const Divider(
+                    color: primaryColor100,
+                    thickness: 8,
+                  ),
+                  _buildNearby(gedung),
+                  const Divider(
+                    color: primaryColor100,
+                    thickness: 8,
+                  ),
+                  _buildReviewText(gedung),
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Tidak dapat memuat data',
+                style: subtitleTextStyle,
+              ),
+            );
+          }
+        },
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
+          final gedung = Provider.of<GedungProvider>(context, listen: false).gedungById?.data?[0];
           Navigator.of(context).push(
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) {
-                return const LiveChatScreen();
+                return LiveChatScreen(
+                  gedung: gedung!,
+                );
               },
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(0.0, 1.0);
@@ -107,25 +164,41 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(Data? gedung) {
+    final reviews = gedung?.reviews;
+    double rating = 0.0;
+    bool isReviewed = true;
+
+    if (reviews != null) {
+      if (reviews.isNotEmpty) {
+        rating = reviews.map((e) => e.rating).fold(0, (previousValue, element) => previousValue + element!);
+      } else {
+        isReviewed = false;
+      }
+    } else {
+      rating = 0.0;
+      isReviewed = false;
+    }
+
     return Stack(
       children: [
         CarouselSlider(
           options: CarouselOptions(
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
-            autoPlayAnimationDuration: Duration(milliseconds: 1000),
+            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
             autoPlayCurve: Curves.easeInOutQuad,
             pauseAutoPlayOnTouch: true,
             viewportFraction: 1,
           ),
-          items: widget.gedung.imageUrl.map((item) {
+          items: ['1', '2', '3'].map((item) {
             return itemCard(item);
           }).toList(),
         ),
         SafeArea(
           child: InkWell(
             onTap: () {
+              Provider.of<GedungProvider>(context, listen: false).clearData();
               Navigator.pop(context);
             },
             child: Container(
@@ -154,7 +227,7 @@ class _DetailScreenState extends State<DetailScreen> {
             children: [
               RatingStars(
                 valueLabelVisibility: false,
-                value: 3.5,
+                value: rating,
                 onValueChanged: (v) {},
                 starBuilder: (index, color) => Icon(
                   Icons.star,
@@ -173,7 +246,7 @@ class _DetailScreenState extends State<DetailScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 4.0),
                 child: Text(
-                  '(3.5/5)',
+                  isReviewed ? '$rating/5' : 'No rating yet',
                   style: subtitleTextStyle.copyWith(
                     color: colorBlack,
                     fontSize: 15,
@@ -192,10 +265,11 @@ class _DetailScreenState extends State<DetailScreen> {
       width: MediaQuery.of(context).size.width,
       height: 250,
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-        ),
+        // image: DecorationImage(
+        //   image: NetworkImage(imageUrl),
+        //   fit: BoxFit.cover,
+        // ),
+        color: primaryColor500,
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 2),
         ],
@@ -203,11 +277,11 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildHargaText() {
+  Widget _buildHargaText(Data? gedung) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Text(
-        'Rp. ${widget.gedung.hargaBooking},-',
+        'Rp. ${gedung!.price!},-',
         style: titleTextStyle.copyWith(
           fontSize: 20.0,
           color: primaryColor500,
@@ -216,7 +290,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildTitleText() {
+  Widget _buildTitleText(Data gedung) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
@@ -225,7 +299,7 @@ class _DetailScreenState extends State<DetailScreen> {
           Flexible(
             flex: 8,
             child: Text(
-              widget.gedung.nama,
+              gedung.name!,
               style: titleTextStyle.copyWith(
                 fontSize: 24,
                 color: colorBlack,
@@ -259,7 +333,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildLokasiText() {
+  Widget _buildLokasiText(Data gedung) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -273,7 +347,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Text(
-            widget.gedung.lokasi,
+            gedung.location!,
             style: subtitleTextStyle.copyWith(
               fontSize: 16,
               color: colorBlack,
@@ -284,7 +358,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildDeskripsiText() {
+  Widget _buildDeskripsiText(Data gedung) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -298,7 +372,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Text(
-            widget.gedung.deskripsi,
+            gedung.description!,
             style: subtitleTextStyle.copyWith(
               fontSize: 14,
               color: colorBlack,
@@ -309,10 +383,14 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildPeta() {
+  Widget _buildPeta(Data gedung) {
+    final lat = double.parse(gedung.latitude ?? '37.43296265331129');
+    final lng = double.parse(gedung.longitude ?? '-122.08832357078792');
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Peta',
@@ -321,12 +399,36 @@ class _DetailScreenState extends State<DetailScreen> {
               color: colorBlack,
             ),
           ),
+          SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: SizedBox(
+              width: 350,
+              height: 240,
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat, lng),
+                  zoom: 17.0,
+                ),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId('Gedung'),
+                    infoWindow: InfoWindow(title: gedung.name),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: LatLng(lat, lng),
+                  ),
+                },
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNearby() {
+  Widget _buildNearby(Data gedung) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -345,7 +447,7 @@ class _DetailScreenState extends State<DetailScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ..._itemNearby(),
+              ..._itemNearby(gedung),
             ],
           ),
         ],
@@ -353,38 +455,55 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  _itemNearby() {
-    return widget.gedung.nearby.map((item) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.place_outlined,
-              size: 25,
-            ),
-            const SizedBox(
-              width: 12.0,
-            ),
-            Expanded(
-              child: Text(
-                item.nama,
+  _itemNearby(Data gedung) {
+    final nearby = gedung.nearby!;
+
+    if (nearby.isNotEmpty) {
+      return nearby.map((item) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.place_outlined,
+                size: 25,
+              ),
+              const SizedBox(
+                width: 12.0,
+              ),
+              Expanded(
+                child: Text(
+                  item.namefacilities!,
+                  style: subtitleTextStyle.copyWith(fontSize: 14),
+                ),
+              ),
+              Text(
+                item.jarak.toString(),
                 style: subtitleTextStyle.copyWith(fontSize: 14),
               ),
+            ],
+          ),
+        );
+      });
+    } else {
+      return [0].map(
+        (e) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Center(
+            child: Text(
+              'Belum ada fasilitas terdekat',
+              style: subtitleTextStyle.copyWith(color: primaryColor500),
             ),
-            Text(
-              '${item.jarak.toString()} m',
-              style: subtitleTextStyle.copyWith(fontSize: 14),
-            ),
-          ],
+          ),
         ),
       );
-    });
+    }
   }
 
-  Widget _buildReviewText() {
-    const item = 4;
+  Widget _buildReviewText(Data gedung) {
+    final review = gedung.reviews!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -397,46 +516,60 @@ class _DetailScreenState extends State<DetailScreen> {
               color: colorBlack,
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: item > 3 ? 3 : item,
-            itemBuilder: (context, index) {
-              if (index > 1) {
-                return TextButton(
-                  onPressed: () {},
+          Builder(builder: (context) {
+            if (review.isNotEmpty) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: review.length > 3 ? 3 : review.length,
+                itemBuilder: (context, index) {
+                  if (index > 1) {
+                    return TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Lihat Lainnya',
+                        style: titleTextStyle.copyWith(
+                          fontSize: 14.0,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        child: Text(index.toString()),
+                      ),
+                      title: Text(
+                        'Review',
+                        style: titleTextStyle.copyWith(
+                          fontSize: 16.0,
+                          color: colorBlack,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${review[index].description}',
+                        style: subtitleTextStyle.copyWith(
+                          fontSize: 14,
+                          color: colorBlack,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    );
+                  }
+                },
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                child: Center(
                   child: Text(
-                    'Lihat Lainnya',
-                    style: titleTextStyle.copyWith(
-                      fontSize: 14.0,
-                      color: Colors.blue,
-                    ),
+                    'Belum ada review',
+                    style: subtitleTextStyle.copyWith(color: primaryColor500),
                   ),
-                );
-              } else {
-                return ListTile(
-                  leading: CircleAvatar(
-                    child: Text(index.toString()),
-                  ),
-                  title: Text(
-                    'Review',
-                    style: titleTextStyle.copyWith(
-                      fontSize: 16.0,
-                      color: colorBlack,
-                    ),
-                  ),
-                  subtitle: Text(
-                    'Bagus banget nih, rekomended! yang penting dijaga kepercayaan konsumen biar terus jadi langganan',
-                    style: subtitleTextStyle.copyWith(
-                      fontSize: 14,
-                      color: colorBlack,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                );
-              }
-            },
-          ),
+                ),
+              );
+            }
+          }),
         ],
       ),
     );

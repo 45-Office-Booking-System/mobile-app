@@ -42,4 +42,12 @@ List<Wishlist> cards = [
     kota: "Probolinggo",
     image: "assets/images/kantor2.jpg",
   ),
+  Wishlist(
+    status: "New",
+    rating: 3.5,
+    amountReviews: "50",
+    nama: "Meeting Room Juanda",
+    kota: "Probolinggo",
+    image: "assets/images/kantor2.jpg",
+  ),
 ];
