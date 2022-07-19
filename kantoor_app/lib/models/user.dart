@@ -42,7 +42,7 @@ class UserPreferences {
   static User myUser = User(
     id: '1',
     email: 'indahhhptr@gmail.com',
-    name: 'Indah',
+    name: 'Indah Putri',
     fullname: 'Indah Putri',
     alamat: 'Jl. Ir. H. Juanda No.296, Patokan - Kraksaan',
     phone: '089627839485',

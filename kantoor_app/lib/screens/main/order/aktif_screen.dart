@@ -15,21 +15,9 @@ class _AktifScreenState extends State<AktifScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset('assets/icons/null.png'),
-            // const SizedBox(
-            //   height: 12.0,
-            // ),
-            // Text(
-            //   'Belum ada booking',
-            //   style: subtitleTextStyle.copyWith(
-            //     color: colorBlack.withOpacity(0.4),
-            //     fontSize: 16,
-            //   ),
-            // ),
             _headerCardOrder(),
-            _buildBodyTiket()
+            _buildBodyTiket(),
           ],
         ),
       ),
@@ -209,8 +197,14 @@ class _AktifScreenState extends State<AktifScreen> {
                   height: 20.0,
                 ),
                 TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.red[300],
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red.shade300),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
                   onPressed: () {},
                   child: Row(
@@ -219,6 +213,9 @@ class _AktifScreenState extends State<AktifScreen> {
                       const Icon(
                         Icons.download_rounded,
                         color: colorWhite,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
                       ),
                       Text(
                         'Unduh Invoice',

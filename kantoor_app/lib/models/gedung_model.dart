@@ -1,4 +1,5 @@
 import 'package:kantoor_app/models/nearby_model.dart';
+import 'package:kantoor_app/models/review_model.dart';
 import 'package:uuid/uuid.dart';
 
 class GedungModel {
@@ -12,6 +13,7 @@ class GedungModel {
   String deskripsi;
   List<Nearby> nearby;
   List<String> imageUrl;
+  List<Review> review;
 
   GedungModel({
     required this.nama,
@@ -23,6 +25,7 @@ class GedungModel {
     required this.deskripsi,
     required this.nearby,
     required this.imageUrl,
+    required this.review,
   }) {
     id = const Uuid().v1();
   }
@@ -63,12 +66,26 @@ Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi
       "https://ik.imagekit.io/tk6ir0e7mng/uploads/2020/10/1603937179245.jpeg",
       "https://www.discoverasr.com/content/dam/tal/media/images/properties/indonesia/bogor/harris-hotel-sentul-city-bogor/meetings-and-events/HSRG-banner-mobile-meeting.jpg.transform/ascott-lowres/image.jpg",
     ],
+    review: [
+      Review(
+        namaReviewer: "Jeff Mosses",
+        rating: 4.5,
+        teks:
+            "Sangat sangat memuaskan. Bersih, nyaman dan aman. Damai dan tentram. Breakfast good dan enak banyak varian. Tolong dipertahankan dan dijaga.",
+      ),
+      Review(
+        namaReviewer: "Manu Rios",
+        rating: 5.0,
+        teks:
+            "Pelayananannya sangat ramah dan memuaskan, fasilitas yang dibutuhkan sudah terlengkapi dan dapat digunakan dengan baik!",
+      ),
+    ],
   ),
   GedungModel(
     nama: "Aryaduta",
     jenis: "Gedung Serbaguna",
     lokasi: "Jakarta Pusat",
-    hargaBooking: "5000000",
+    hargaBooking: "5.000.000",
     latitude: 0,
     longitude: 0,
     deskripsi: """
@@ -99,12 +116,26 @@ Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi
       "https://asset.kompas.com/crops/b74HZxpQihobPm2yId22bj74T1E=/0x0:0x0/375x240/data/photo/2014/06/30/1611258rps20140630-160940p.jpg",
       "https://s.kaskus.id/r480x480/images/fjb/2016/06/18/hotel_aryaduta_jakarta_pusat_5478169_1466223674.jpg",
     ],
+    review: [
+      Review(
+        namaReviewer: "Jackson Wang",
+        rating: 4.0,
+        teks:
+            "Fasilitas yang disediakan sudah sesuai, tempatnya sejuk dan nyaman",
+      ),
+      Review(
+        namaReviewer: "IU",
+        rating: 4.5,
+        teks:
+            "Fasilitas nya sangat memadai serta pelayanan yang ramah, cocok nih buat kamu yang mau ngadain acara private bareng keluarga",
+      ),
+    ],
   ),
   GedungModel(
     nama: "Auditorium Harun Nasution UIN Jakarta",
     jenis: "Auditorium",
     lokasi: "Jakarta Selatan",
-    hargaBooking: "12000000",
+    hargaBooking: "1.200.0000",
     latitude: 0,
     longitude: 0,
     deskripsi: """
@@ -135,6 +166,14 @@ Note : tanyakan terlebih dahulu ketersediaan office sebelum melakukan transaksi
       "https://www.uinjkt.ac.id/wp-content/uploads/2018/06/halal-1.jpg",
       "http://www.uinjkt.ac.id/wp-content/uploads/2016/11/14906945_2019133414979608_7604633589399443612_n.jpg",
       "https://1.bp.blogspot.com/-HDRln0e3ZbU/WDy0_SJGqjI/AAAAAAAAAQs/mM176uvnkUkzosqc41ixltK5nxmR6xiIQCLcB/s640/UIN102%2BBACK%2BBURN.jpg",
+    ],
+    review: [
+      Review(
+        namaReviewer: "Mr. Sulthan",
+        rating: 4.0,
+        teks:
+            "Auditorium nya luas dan cocok buat acara seminar, pelayanan ramah, dan tempatnya bersih",
+      ),
     ],
   ),
   GedungModel(
@@ -174,6 +213,20 @@ Note : Harga yang tertera dihitung per jam
       "https://kekantor.com/wp-content/uploads/2021/04/cohive-the-maja7-800x600.jpeg",
       "https://kekantor.com/wp-content/uploads/2021/04/cohive-the-breeze6-800x600.jpeg",
     ],
+    review: [
+      Review(
+        namaReviewer: "Sana Puspita",
+        rating: 4.5,
+        teks:
+            "Interior ruangannya modern banget, nyaman buat dipakai, sejuk dan tenang",
+      ),
+      Review(
+        namaReviewer: "Angkasa Widjaya",
+        rating: 4.5,
+        teks:
+            "Ruangan dengan desain minimalis dan tampak segar lengkap dengan ventilasi udara, recomended banget!",
+      ),
+    ],
   ),
   GedungModel(
     nama: "Grand Ballroom Ambhara",
@@ -209,6 +262,19 @@ Note : tanyakan terlebih dahulu terkait ketersediaan fasilitas yang dibutuhkan.
       "https://eventopediacdn.azureedge.net//content/Ambhara-Hotel-1.jpg",
       "https://weddingmarket.com/storage/images_venue/2881596097073526_DSL_0721.JPG",
     ],
+    review: [
+      Review(
+        namaReviewer: "Samudra Alfa",
+        rating: 4.5,
+        teks:
+            "Ruangan yang sangat mewah, cocok untuk acara yang istimewa seperti pernikahan!!, fasilitas bisa disesuaikan dengan kebutuhan",
+      ),
+      Review(
+        namaReviewer: "Vanilateee",
+        rating: 4.5,
+        teks: "Recomended Poul!!!",
+      ),
+    ],
   ),
   GedungModel(
     nama: "The Ritz-Carlton Jakarta Pacific Place",
@@ -218,11 +284,8 @@ Note : tanyakan terlebih dahulu terkait ketersediaan fasilitas yang dibutuhkan.
     latitude: 0,
     longitude: 0,
     deskripsi: """
-Akomodasi dengan sertifikat CHSE yang memenuhi protokol kebersihan dari Kemenparekraf.
 The Ritz-Carlton Jakarta, Hotel yang menawarkan ruang pertemuan utama untuk pertemuan bisnis dari semua ukuran.
-Hubungi keahlian spesialis Layanan Rapat khusus hotel kami yang berkembang dalam menciptakan konferensi yang sempurna dalam skala apa pun.
-Tempat pertemuan kami mendukung masa depan yang berkelanjutan dengan menawarkan pilihan layanan air, 
-makanan organik dan lokal dan pilihan makanan laut yang berkelanjutan.
+Hubungi keahlian spesialis Layanan Rapat khusus hotel kami untuk menciptakan konferensi yang sempurna!.
 
 Fasilitas :
 - Free flow gourmet coffee and tea
@@ -266,6 +329,19 @@ Note : Tanyakan kepada tim Penjualan kami untuk informasi lebih rinci tentang be
       "https://ik.imgkit.net/3vlqs5axxjf/external/http://www.cfmedia.vfmleonardo.com/imageRepo/7/0/147/773/772/jktrt-meeting-0014-hor-clsc_O.jpg?tr=w-922%2Ch-519%2Cfo-auto",
       "https://venuemagz.com/wp-content/uploads/2017/10/Ritz-Carlton-Pacific-Place-800x480_c.jpg",
     ],
+    review: [
+      Review(
+        namaReviewer: "Jihan Halana",
+        rating: 4.5,
+        teks:
+            "Fasilitasnya lengkap pake bangettt, recomended banget tempat ini buat acara kecil ataupun besar!!. ",
+      ),
+      Review(
+        namaReviewer: "Septian Aidan",
+        rating: 4.0,
+        teks: "iya, Recomended!",
+      ),
+    ],
   ),
   GedungModel(
     nama: "Raffles Hotel Meeting Room",
@@ -307,6 +383,20 @@ More Info : www.raffles.com/jakarta/
       "https://www.raffles.com/assets/0/72/719/720/1472/49c04fbb-8236-4253-8b84-8bf1f97f9c93.jpg",
       "https://www.rafflesjakarta.com/wp-content/uploads/sites/206/2021/09/eventspage-1200xlondon2-600x321.jpg",
     ],
+    review: [
+      Review(
+        namaReviewer: "Laskar Adijaya",
+        rating: 4.5,
+        teks:
+            "Interior ruangannya modern banget, nyaman buat dipakai, sejuk dan tenang",
+      ),
+      Review(
+        namaReviewer: "Lembayung_",
+        rating: 4.5,
+        teks:
+            "Ruangan dengan desain minimalis dan tampak segar lengkap dengan ventilasi udara, recomended banget!",
+      ),
+    ],
   ),
   GedungModel(
     nama: "Blue Sky Hotel Kemayoran - Meeting Room",
@@ -347,6 +437,20 @@ Note : tanyakan terlebih dahulu ketersediaan meeting room yang tersedia
       "https://cdn.1001malam.com/uploads/hotels/blueskyhotelpetamburan_meetingroom_1251184.jpg",
       "https://static51.com-hotel.com/uploads/hotel/60612/photo/lg_blue-sky-hotel-petamburan_155747787343.jpg",
       "https://img.hotelmurah.com/hotel/myhm_1236_5.jpg",
+    ],
+    review: [
+      Review(
+        namaReviewer: "Galaksi Aldebaran",
+        rating: 5.0,
+        teks:
+            "Cocok buat lo yang suka bertemakan langit, Ruangannya sejuk dan aestethic!",
+      ),
+      Review(
+        namaReviewer: "Kejora",
+        rating: 5.0,
+        teks:
+            "Suka banget sama tempatnya, sangat segar dan nyaman dengan desain ruangan yang bertemakan langit!",
+      ),
     ],
   ),
 ];

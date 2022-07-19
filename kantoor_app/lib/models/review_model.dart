@@ -7,25 +7,15 @@ class Review {
   String namaReviewer;
   double rating;
   String teks;
-  String idGedung;
+  // String idGedung;
 
   Review({
     // required this.namaGedung,
     required this.namaReviewer,
     required this.rating,
     required this.teks,
-    required this.idGedung,
+    // required this.idGedung,
   }) {
     id = const Uuid().v1();
   }
 }
-
-List<Review> reviews = [
-  Review(
-    // namaGedung: ,
-    namaReviewer: "Anggi",
-    rating: 4.5,
-    teks: "Good Mantap",
-    idGedung: "sdfsdf",
-  )
-];

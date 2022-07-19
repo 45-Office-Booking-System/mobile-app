@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             'Cari Gedung, Kantor, Penyewaan Tempat lainnya',
                             style: subtitleTextStyle.copyWith(
-                              fontSize: 12,
+                              fontSize: 11,
                               color: primaryColor500,
                             ),
                           ),
