@@ -90,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   prefixIcon: const Icon(
-                    Icons.email,
+                    Icons.lock,
                     color: primaryColor500,
                   ),
                   suffixIcon: IconButton(

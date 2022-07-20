@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jumping_dot/jumping_dot.dart';
+import 'package:kantoor_app/models/booking.dart';
 import 'package:kantoor_app/screens/main/order/review_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/booking_provider.dart';
+import 'package:provider/provider.dart';
 
 class SelesaiScreen extends StatefulWidget {
   const SelesaiScreen({Key? key}) : super(key: key);
@@ -11,23 +15,76 @@ class SelesaiScreen extends StatefulWidget {
 
 class _SelesaiScreenState extends State<SelesaiScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final booking = Provider.of<BookingProvider>(context, listen: false);
+      booking.getBookingSelesaiById(3);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildHeaderCardOrder(),
-            _buildBodyTiket(),
-          ],
-        ),
-      ),
+    return Consumer<BookingProvider>(
+      builder: (context, manager, _) {
+        final isLoading = manager.stateSelesai == BookingSelesaiState.loading;
+        final isError = manager.stateSelesai == BookingSelesaiState.error;
+        final booking = manager.bookingSelesai;
+
+        if (isLoading) {
+          return const Center(
+            child: JumpingDots(
+              color: primaryColor500,
+              radius: 16,
+              innerPadding: 4,
+              numberOfDots: 3,
+              animationDuration: Duration(milliseconds: 200),
+            ),
+          );
+        }
+
+        if (isError) {
+          return Center(
+            child: Text(
+              manager.error!.toUpperCase(),
+              style: subtitleTextStyle.copyWith(
+                fontSize: 16,
+              ),
+            ),
+          );
+        }
+
+        if (booking != null) {
+          final data = booking.data;
+          if (data != null) {
+            if (data.isNotEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      _buildHeaderCardOrder(),
+                      _buildBodyTiket(data[0]),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return _buildCardNoBooking();
+            }
+          } else {
+            return _buildCardNoBooking();
+          }
+        } else {
+          return _buildCardNoBooking();
+        }
+      },
     );
   }
 
-  _buildCardNoBooking() {
+  Widget _buildCardNoBooking() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset('assets/icons/null.png'),
         const SizedBox(
@@ -47,7 +104,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
   _buildHeaderCardOrder() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      color: primaryColor100,
+      color: Colors.grey,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -63,7 +120,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                 "Order Details",
                 style: titleTextStyle.copyWith(
                   fontSize: 18,
-                  color: primaryColor900,
+                  color: primaryColor700,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -77,13 +134,15 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
     );
   }
 
-  _buildBodyTiket() {
+  _buildBodyTiket(Data booking) {
+    final gedung = booking.gedung;
+
     return Column(
       children: [
         Container(
           height: 5,
           width: MediaQuery.of(context).size.width,
-          color: primaryColor900,
+          color: colorBlack.withOpacity(0.6),
         ),
         Container(
           width: MediaQuery.of(context).size.width,
@@ -106,7 +165,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                   ),
                 ),
                 Text(
-                  'Office Meeting Room Montana Building lt 7',
+                  gedung?[0].name ?? 'Cant load name',
                   style: titleTextStyle.copyWith(
                     fontSize: 12,
                     color: colorBlack,
@@ -115,7 +174,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                   maxLines: 2,
                 ),
                 Text(
-                  'Kota Surabaya',
+                  gedung?[0].location ?? 'Cant load location',
                   style: subtitleTextStyle.copyWith(
                     fontSize: 12,
                     color: colorBlack,
@@ -139,7 +198,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                         ),
                       ),
                       Text(
-                        '20-07-2022',
+                        booking.orderdate!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -161,7 +220,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                         ),
                       ),
                       Text(
-                        '20-08-2022',
+                        booking.checkin!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -183,7 +242,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                         ),
                       ),
                       Text(
-                        '20-08-2022',
+                        booking.checkout!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -205,7 +264,7 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                         ),
                       ),
                       Text(
-                        'c25cZ10L',
+                        booking.bookingcode!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -230,7 +289,9 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ReviewGedung(),
+                        builder: (context) => ReviewGedung(
+                          idGedung: gedung?[0].id ?? 3,
+                        ),
                       ),
                     );
                   },

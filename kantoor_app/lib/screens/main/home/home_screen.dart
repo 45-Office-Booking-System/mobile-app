@@ -319,14 +319,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 300,
                 child: CarouselSlider(
                   items: gedungs.map((item) {
+                    final index = gedungs.indexOf(item);
+
                     return Builder(
                       builder: (BuildContext context) {
+                        final reviews = item.reviews;
+                        double rating = 0.0;
+                        double temp = 0.0;
+
+                        if (reviews != null) {
+                          if (reviews.isNotEmpty) {
+                            final jumlah = reviews.length;
+                            temp = reviews
+                                .map((e) => e.rating)
+                                .fold(0, (previousValue, element) => previousValue + element!);
+                            rating = temp / jumlah;
+                            rating = double.parse(rating.toStringAsFixed(1));
+                          } else {
+                            rating = 0.0;
+                          }
+                        } else {
+                          rating = 0.0;
+                        }
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(
                               PageRouteBuilder(
                                 pageBuilder: (context, animation, secondaryAnimation) {
-                                  return DetailScreen(id: item.id!);
+                                  return DetailScreen(
+                                    id: item.id!,
+                                    index: index,
+                                  );
                                 },
                                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                   const begin = Offset(0.0, 1.0);
@@ -350,33 +373,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 160,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  // image: DecorationImage(
-                                  //   image: NetworkImage(item.imageUrl[0]),
-                                  //   fit: BoxFit.cover,
-                                  // ),
+                                  image: DecorationImage(
+                                    image: NetworkImage(listImage[index][0]),
+                                    fit: BoxFit.cover,
+                                  ),
                                   color: primaryColor500,
                                 ),
                               ),
                               const SizedBox(
                                 height: 5.0,
                               ),
-                              RatingStars(
-                                valueLabelVisibility: false,
-                                value: 3.5,
-                                onValueChanged: (v) {},
-                                starBuilder: (index, color) => Icon(
-                                  Icons.star,
-                                  color: color,
-                                ),
-                                starCount: 5,
-                                starSize: 20,
-                                maxValue: 5,
-                                starSpacing: 2,
-                                animationDuration: const Duration(milliseconds: 1000),
-                                valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                                valueLabelMargin: const EdgeInsets.only(right: 8),
-                                starOffColor: const Color(0xffe7e8ea),
-                                starColor: Colors.yellow,
+                              Row(
+                                children: [
+                                  RatingStars(
+                                    valueLabelVisibility: false,
+                                    value: rating,
+                                    onValueChanged: (v) {},
+                                    starBuilder: (index, color) => Icon(
+                                      Icons.star,
+                                      color: color,
+                                    ),
+                                    starCount: 5,
+                                    starSize: 20,
+                                    maxValue: 5,
+                                    starSpacing: 2,
+                                    animationDuration: const Duration(milliseconds: 1000),
+                                    valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                                    valueLabelMargin: const EdgeInsets.only(right: 8),
+                                    starOffColor: const Color(0xffe7e8ea),
+                                    starColor: Colors.yellow,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0, top: 6.0),
+                                    child: Text(
+                                      rating.toString(),
+                                      style: subtitleTextStyle.copyWith(
+                                        color: colorBlack,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 5.0,
@@ -425,21 +462,43 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else {
               List<Data> result = [];
-              for (int i = 0; i < 5; i++) {
+              for (int i = 0; i < 4; i++) {
                 result.add(gedungs[i]);
               }
               return SizedBox(
                 height: 300,
                 child: CarouselSlider(
                   items: result.map((item) {
+                    final index = gedungs.indexOf(item);
                     return Builder(
                       builder: (BuildContext context) {
+                        final reviews = item.reviews;
+                        double rating = 0.0;
+                        double temp = 0.0;
+
+                        if (reviews != null) {
+                          if (reviews.isNotEmpty) {
+                            final jumlah = reviews.length;
+                            temp = reviews
+                                .map((e) => e.rating)
+                                .fold(0, (previousValue, element) => previousValue + element!);
+                            rating = temp / jumlah;
+                            rating = double.parse(rating.toStringAsFixed(1));
+                          } else {
+                            rating = 0.0;
+                          }
+                        } else {
+                          rating = 0.0;
+                        }
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(
                               PageRouteBuilder(
                                 pageBuilder: (context, animation, secondaryAnimation) {
-                                  return DetailScreen(id: item.id!);
+                                  return DetailScreen(
+                                    id: item.id!,
+                                    index: index,
+                                  );
                                 },
                                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                   const begin = Offset(0.0, 1.0);
@@ -463,33 +522,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 160,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  // image: DecorationImage(
-                                  //   image: NetworkImage(item.imageUrl[0]),
-                                  //   fit: BoxFit.cover,
-                                  // ),
+                                  image: DecorationImage(
+                                    image: NetworkImage(listImage[index][0]),
+                                    fit: BoxFit.cover,
+                                  ),
                                   color: primaryColor500,
                                 ),
                               ),
                               const SizedBox(
                                 height: 5.0,
                               ),
-                              RatingStars(
-                                valueLabelVisibility: false,
-                                value: 3.5,
-                                onValueChanged: (v) {},
-                                starBuilder: (index, color) => Icon(
-                                  Icons.star,
-                                  color: color,
-                                ),
-                                starCount: 5,
-                                starSize: 20,
-                                maxValue: 5,
-                                starSpacing: 2,
-                                animationDuration: const Duration(milliseconds: 1000),
-                                valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                                valueLabelMargin: const EdgeInsets.only(right: 8),
-                                starOffColor: const Color(0xffe7e8ea),
-                                starColor: Colors.yellow,
+                              Row(
+                                children: [
+                                  RatingStars(
+                                    valueLabelVisibility: false,
+                                    value: rating,
+                                    onValueChanged: (v) {},
+                                    starBuilder: (index, color) => Icon(
+                                      Icons.star,
+                                      color: color,
+                                    ),
+                                    starCount: 5,
+                                    starSize: 20,
+                                    maxValue: 5,
+                                    starSpacing: 2,
+                                    animationDuration: const Duration(milliseconds: 1000),
+                                    valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                                    valueLabelMargin: const EdgeInsets.only(right: 8),
+                                    starOffColor: const Color(0xffe7e8ea),
+                                    starColor: Colors.yellow,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0, top: 6.0),
+                                    child: Text(
+                                      rating.toString(),
+                                      style: subtitleTextStyle.copyWith(
+                                        color: colorBlack,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 5.0,
@@ -607,98 +680,242 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       if (gedungs != null) {
+        if (gedungs.length > 5) {
+        } else {}
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: gedungs.map((item) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return DetailScreen(id: item.id!);
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        final tween = Tween(begin: begin, end: end);
-                        final offsetAnimation = animation.drive(tween);
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },
-                      transitionDuration: const Duration(milliseconds: 500),
+              final index = gedungs.indexOf(item);
+              final reviews = item.reviews;
+              double rating = 0.0;
+              double temp = 0.0;
+
+              if (reviews != null) {
+                if (reviews.isNotEmpty) {
+                  final jumlah = reviews.length;
+                  temp = reviews.map((e) => e.rating).fold(0, (previousValue, element) => previousValue + element!);
+                  rating = temp / jumlah;
+                  rating = double.parse(rating.toStringAsFixed(1));
+                } else {
+                  rating = 0.0;
+                }
+              } else {
+                rating = 0.0;
+              }
+
+              if (index < 4) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return DetailScreen(
+                            id: item.id!,
+                            index: index,
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          final tween = Tween(begin: begin, end: end);
+                          final offsetAnimation = animation.drive(tween);
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 500),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            image: DecorationImage(
+                              image: NetworkImage(listImage[index][0]),
+                              fit: BoxFit.cover,
+                            ),
+                            color: primaryColor500,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Row(
+                          children: [
+                            RatingStars(
+                              valueLabelVisibility: false,
+                              value: rating,
+                              onValueChanged: (v) {},
+                              starBuilder: (index, color) => Icon(
+                                Icons.star,
+                                color: color,
+                              ),
+                              starCount: 5,
+                              starSize: 20,
+                              maxValue: 5,
+                              starSpacing: 2,
+                              animationDuration: const Duration(milliseconds: 1000),
+                              valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                              valueLabelMargin: const EdgeInsets.only(right: 8),
+                              starOffColor: const Color(0xffe7e8ea),
+                              starColor: Colors.yellow,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0, top: 6.0),
+                              child: Text(
+                                rating.toString(),
+                                style: subtitleTextStyle.copyWith(
+                                  color: colorBlack,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            item.name!,
+                            style: titleTextStyle.copyWith(
+                              color: colorBlack,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            item.location!,
+                            style: subtitleTextStyle.copyWith(
+                              color: colorBlack,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 160,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          // image: DecorationImage(
-                          //   image: NetworkImage(item.imageUrl[0]),
-                          //   fit: BoxFit.cover,
-                          // ),
-                          color: primaryColor500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      RatingStars(
-                        valueLabelVisibility: false,
-                        value: 3.5,
-                        onValueChanged: (v) {},
-                        starBuilder: (index, color) => Icon(
-                          Icons.star,
-                          color: color,
-                        ),
-                        starCount: 5,
-                        starSize: 20,
-                        maxValue: 5,
-                        starSpacing: 2,
-                        animationDuration: const Duration(milliseconds: 1000),
-                        valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                        valueLabelMargin: const EdgeInsets.only(right: 8),
-                        starOffColor: const Color(0xffe7e8ea),
-                        starColor: Colors.yellow,
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          item.name!,
-                          style: titleTextStyle.copyWith(
-                            color: colorBlack,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          item.location!,
-                          style: subtitleTextStyle.copyWith(
-                            color: colorBlack,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-              );
+                );
+              } else {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return DetailScreen(
+                            id: item.id!,
+                            index: index,
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          final tween = Tween(begin: begin, end: end);
+                          final offsetAnimation = animation.drive(tween);
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 500),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            // image: DecorationImage(
+                            //   image: NetworkImage(item.imageUrl[0]),
+                            //   fit: BoxFit.cover,
+                            // ),
+                            color: primaryColor500,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Row(
+                          children: [
+                            RatingStars(
+                              valueLabelVisibility: false,
+                              value: rating,
+                              onValueChanged: (v) {},
+                              starBuilder: (index, color) => Icon(
+                                Icons.star,
+                                color: color,
+                              ),
+                              starCount: 5,
+                              starSize: 20,
+                              maxValue: 5,
+                              starSpacing: 2,
+                              animationDuration: const Duration(milliseconds: 1000),
+                              valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                              valueLabelMargin: const EdgeInsets.only(right: 8),
+                              starOffColor: const Color(0xffe7e8ea),
+                              starColor: Colors.yellow,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0, top: 6.0),
+                              child: Text(
+                                rating.toString(),
+                                style: subtitleTextStyle.copyWith(
+                                  color: colorBlack,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            item.name!,
+                            style: titleTextStyle.copyWith(
+                              color: colorBlack,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            item.location!,
+                            style: subtitleTextStyle.copyWith(
+                              color: colorBlack,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
             }).toList(),
           ),
         );

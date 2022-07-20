@@ -29,11 +29,10 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['email'] = email;
-    data['password'] = password;
     data['name'] = name;
     data['fullname'] = fullname;
+    data['password'] = password;
+    data['email'] = email;
     data['alamat'] = alamat;
     data['phone'] = phone;
     return data;

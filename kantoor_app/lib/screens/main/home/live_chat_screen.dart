@@ -135,7 +135,9 @@ class _LiveChatScreenState extends State<LiveChatScreen> {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _chatController.clear();
+              },
               icon: const Icon(
                 Icons.send,
                 color: colorWhite,

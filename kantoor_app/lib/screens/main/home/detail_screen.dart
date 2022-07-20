@@ -11,9 +11,11 @@ import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
   final int id;
+  final int index;
   const DetailScreen({
     Key? key,
     required this.id,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -167,11 +169,15 @@ class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClie
   Widget _buildHeader(Data? gedung) {
     final reviews = gedung?.reviews;
     double rating = 0.0;
+    double temp = 0.0;
     bool isReviewed = true;
 
     if (reviews != null) {
       if (reviews.isNotEmpty) {
-        rating = reviews.map((e) => e.rating).fold(0, (previousValue, element) => previousValue + element!);
+        final jumlah = reviews.length;
+        temp = reviews.map((e) => e.rating).fold(0, (previousValue, element) => previousValue + element!);
+        rating = temp / jumlah;
+        rating = double.parse(rating.toStringAsFixed(1));
       } else {
         isReviewed = false;
       }
@@ -191,8 +197,9 @@ class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClie
             pauseAutoPlayOnTouch: true,
             viewportFraction: 1,
           ),
-          items: ['1', '2', '3'].map((item) {
-            return itemCard(item);
+          items: listImage.map((item) {
+            final index = listImage.indexOf(item);
+            return itemCard(item, index);
           }).toList(),
         ),
         SafeArea(
@@ -260,21 +267,38 @@ class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClie
     );
   }
 
-  Widget itemCard(String imageUrl) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 250,
-      decoration: BoxDecoration(
-        // image: DecorationImage(
-        //   image: NetworkImage(imageUrl),
-        //   fit: BoxFit.cover,
-        // ),
-        color: primaryColor500,
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 2),
-        ],
-      ),
-    );
+  Widget itemCard(List<String> list, int index) {
+    if (widget.index < 4) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 250,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(list[index]),
+            fit: BoxFit.cover,
+          ),
+          color: primaryColor500,
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 2),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 250,
+        decoration: BoxDecoration(
+          // image: DecorationImage(
+          //   image: NetworkImage(imageUrl),
+          //   fit: BoxFit.cover,
+          // ),
+          color: primaryColor500,
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 2),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildHargaText(Data? gedung) {
@@ -518,32 +542,47 @@ class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClie
           ),
           Builder(builder: (context) {
             if (review.isNotEmpty) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: review.length > 3 ? 3 : review.length,
-                itemBuilder: (context, index) {
-                  if (index > 1) {
-                    return TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Lihat Lainnya',
-                        style: titleTextStyle.copyWith(
-                          fontSize: 14.0,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    );
-                  } else {
+              return SizedBox(
+                height: 300,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  itemCount: review.length,
+                  itemBuilder: (context, index) {
                     return ListTile(
                       leading: CircleAvatar(
                         child: Text(index.toString()),
                       ),
-                      title: Text(
-                        'Review',
-                        style: titleTextStyle.copyWith(
-                          fontSize: 16.0,
-                          color: colorBlack,
-                        ),
+                      title: Row(
+                        children: [
+                          RatingStars(
+                            valueLabelVisibility: false,
+                            value: review[index].rating!,
+                            onValueChanged: (v) {},
+                            starBuilder: (index, color) => Icon(
+                              Icons.star,
+                              color: color,
+                            ),
+                            starCount: 5,
+                            starSize: 20,
+                            maxValue: 5,
+                            starSpacing: 2,
+                            animationDuration: const Duration(milliseconds: 1000),
+                            valueLabelPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                            valueLabelMargin: const EdgeInsets.only(right: 8),
+                            starOffColor: const Color(0xffe7e8ea),
+                            starColor: Colors.yellow,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                            child: Text(
+                              '${review[index].rating}',
+                              style: subtitleTextStyle.copyWith(
+                                color: colorBlack,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       subtitle: Text(
                         '${review[index].description}',
@@ -555,8 +594,8 @@ class _DetailScreenState extends State<DetailScreen> with AutomaticKeepAliveClie
                         maxLines: 1,
                       ),
                     );
-                  }
-                },
+                  },
+                ),
               );
             } else {
               return Padding(

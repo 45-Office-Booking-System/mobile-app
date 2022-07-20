@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kantoor_app/models/gedung.dart';
 import 'package:kantoor_app/services/gedung_api.dart';
@@ -42,6 +43,9 @@ class GedungProvider extends ChangeNotifier {
       _gedungById = await service.getGedungById(id);
       changeState(GedungState.none);
     } catch (e) {
+      if (e is DioError) {
+        debugPrint('bossss ${e.response!.statusCode.toString()}');
+      }
       changeState(GedungState.error);
       debugPrint('bossss ${e.toString()}');
     }

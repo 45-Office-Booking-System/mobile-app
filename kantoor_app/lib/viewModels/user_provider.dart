@@ -26,10 +26,34 @@ class UserProvider extends ChangeNotifier {
       changeState(UserState.none);
     } catch (e) {
       if (e is DioError) {
+        changeState(UserState.error);
         debugPrint('bossss ${e.response!.statusCode.toString()}');
+        debugPrint('bossss ${e.response!.data['message'].toString()}');
+      } else {
+        changeState(UserState.error);
+        debugPrint('bossss ${e.toString()}');
       }
-      changeState(UserState.error);
-      debugPrint('bossss ${e.toString()}');
     }
+  }
+
+  Future<bool> editProfile(int id, User user) async {
+    bool status = false;
+    try {
+      changeState(UserState.loading);
+      await userApi.editProfile(id, user);
+      status = true;
+      changeState(UserState.none);
+    } catch (e) {
+      if (e is DioError) {
+        changeState(UserState.error);
+        debugPrint('bossss ${e.response!.statusCode.toString()}');
+        debugPrint('bossss ${e.response!.data['message'].toString()}');
+      } else {
+        changeState(UserState.error);
+        debugPrint('bossss ${e.toString()}');
+      }
+    }
+
+    return status;
   }
 }

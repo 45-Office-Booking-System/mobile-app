@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jumping_dot/jumping_dot.dart';
+import 'package:kantoor_app/models/booking.dart';
+import 'package:kantoor_app/viewModels/booking_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/theme.dart';
 
 class AktifScreen extends StatefulWidget {
@@ -10,17 +14,90 @@ class AktifScreen extends StatefulWidget {
 
 class _AktifScreenState extends State<AktifScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final booking = Provider.of<BookingProvider>(context, listen: false);
+      booking.getBookingAktifById(1);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            _headerCardOrder(),
-            _buildBodyTiket(),
-          ],
+    return Consumer<BookingProvider>(
+      builder: (context, manager, _) {
+        final isLoading = manager.stateAktif == BookingAktifState.loading;
+        final isError = manager.stateAktif == BookingAktifState.error;
+        final booking = manager.bookingAktif;
+
+        if (isLoading) {
+          return const Center(
+            child: JumpingDots(
+              color: primaryColor500,
+              radius: 16,
+              innerPadding: 4,
+              numberOfDots: 3,
+              animationDuration: Duration(milliseconds: 200),
+            ),
+          );
+        }
+
+        if (isError) {
+          return Center(
+            child: Text(
+              manager.error!,
+              style: titleTextStyle.copyWith(
+                fontSize: 24,
+                color: colorWhite,
+              ),
+            ),
+          );
+        }
+
+        if (booking != null) {
+          final data = booking.data;
+          if (data != null) {
+            if (data.isNotEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      _headerCardOrder(),
+                      _buildBodyTiket(data[0]),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return _buildCardNoBooking();
+            }
+          } else {
+            return _buildCardNoBooking();
+          }
+        } else {
+          return _buildCardNoBooking();
+        }
+      },
+    );
+  }
+
+  _buildCardNoBooking() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/icons/null.png'),
+        const SizedBox(
+          height: 12.0,
         ),
-      ),
+        Text(
+          'Belum ada booking',
+          style: subtitleTextStyle.copyWith(
+            color: colorBlack.withOpacity(0.4),
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
 
@@ -57,7 +134,9 @@ class _AktifScreenState extends State<AktifScreen> {
     );
   }
 
-  _buildBodyTiket() {
+  _buildBodyTiket(Data booking) {
+    final gedung = booking.gedung;
+
     return Column(
       children: [
         Container(
@@ -86,7 +165,7 @@ class _AktifScreenState extends State<AktifScreen> {
                   ),
                 ),
                 Text(
-                  'Office Meeting Room Montana Building lt 7',
+                  gedung?[0].name ?? 'Cant load name',
                   style: titleTextStyle.copyWith(
                     fontSize: 12,
                     color: colorBlack,
@@ -95,7 +174,7 @@ class _AktifScreenState extends State<AktifScreen> {
                   maxLines: 2,
                 ),
                 Text(
-                  'Kota Surabaya',
+                  gedung?[0].location ?? 'Cant load location',
                   style: subtitleTextStyle.copyWith(
                     fontSize: 12,
                     color: colorBlack,
@@ -119,7 +198,7 @@ class _AktifScreenState extends State<AktifScreen> {
                         ),
                       ),
                       Text(
-                        '20-07-2022',
+                        booking.orderdate!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -141,7 +220,7 @@ class _AktifScreenState extends State<AktifScreen> {
                         ),
                       ),
                       Text(
-                        '20-08-2022',
+                        booking.checkin!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -163,7 +242,7 @@ class _AktifScreenState extends State<AktifScreen> {
                         ),
                       ),
                       Text(
-                        '20-08-2022',
+                        booking.checkout!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,
@@ -185,7 +264,7 @@ class _AktifScreenState extends State<AktifScreen> {
                         ),
                       ),
                       Text(
-                        'c25cZ10L',
+                        booking.bookingcode!,
                         style: subtitleTextStyle.copyWith(
                           fontSize: 12,
                           color: colorBlack,

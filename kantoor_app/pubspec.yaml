@@ -41,6 +41,7 @@ dependencies:
   jumping_dot: ^0.0.4
   provider: ^6.0.3
   shared_preferences: ^2.0.15
+  smooth_star_rating: ^1.1.1
   uuid: ^3.0.6
 
 dev_dependencies:

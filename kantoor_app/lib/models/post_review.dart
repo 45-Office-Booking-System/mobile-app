@@ -1,25 +1,21 @@
-class Reviews {
-  int? id;
+class PostReview {
   double? rating;
   String? description;
+  int? idGedung;
 
-  Reviews({
-    this.id,
-    this.rating,
-    this.description,
-  });
+  PostReview({this.rating, this.description, this.idGedung});
 
-  Reviews.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    rating = json['rating'].toDouble();
+  PostReview.fromJson(Map<String, dynamic> json) {
+    rating = json['rating'];
     description = json['description'];
+    idGedung = json['id_gedung'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
     data['rating'] = rating;
     data['description'] = description;
+    data['id_gedung'] = idGedung;
     return data;
   }
 }

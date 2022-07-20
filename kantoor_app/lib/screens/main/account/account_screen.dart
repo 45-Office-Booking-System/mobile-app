@@ -233,10 +233,13 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      final user = Provider.of<UserProvider>(context, listen: false).user;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditAccount(),
+                          builder: (context) => EditAccount(
+                            user: user!,
+                          ),
                         ),
                       );
                     },
@@ -354,8 +357,9 @@ class _AccountScreenState extends State<AccountScreen> {
             if (isLoading) {
               return const JumpingDots(
                 color: primaryColor500,
-                radius: 10,
+                radius: 7,
                 numberOfDots: 3,
+                innerPadding: 2,
                 animationDuration: Duration(milliseconds: 200),
               );
             }

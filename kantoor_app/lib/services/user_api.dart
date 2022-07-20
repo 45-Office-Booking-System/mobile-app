@@ -26,4 +26,18 @@ class UserApi {
       rethrow;
     }
   }
+
+  Future<void> editProfile(int id, User user) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      _dio.options.headers['authorization'] = "Bearer $token";
+      Response response = await _dio.put(
+        '${_baseUrl}customer/profile/$id',
+        data: user.toJson(),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
