@@ -58,16 +58,18 @@ class _SelesaiScreenState extends State<SelesaiScreen> {
               height: 30,
               width: 30,
             ),
-            const SizedBox(
-              width: 60,
-            ),
-            Text(
-              "Order Details",
-              style: titleTextStyle.copyWith(
-                fontSize: 18,
-                color: primaryColor900,
+            Expanded(
+              child: Text(
+                "Order Details",
+                style: titleTextStyle.copyWith(
+                  fontSize: 18,
+                  color: primaryColor900,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              width: 30,
             ),
           ],
         ),

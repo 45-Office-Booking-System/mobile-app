@@ -38,16 +38,18 @@ class _AktifScreenState extends State<AktifScreen> {
               height: 30,
               width: 30,
             ),
-            const SizedBox(
-              width: 60,
-            ),
-            Text(
-              "Order Details",
-              style: titleTextStyle.copyWith(
-                fontSize: 18,
-                color: primaryColor900,
+            Expanded(
+              child: Text(
+                "Order Details",
+                style: titleTextStyle.copyWith(
+                  fontSize: 18,
+                  color: primaryColor900,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              width: 30,
             ),
           ],
         ),
@@ -67,8 +69,7 @@ class _AktifScreenState extends State<AktifScreen> {
           width: MediaQuery.of(context).size.width,
           color: Colors.grey[100],
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 3.0, left: 10.0, right: 10.0, bottom: 3.0),
+            padding: const EdgeInsets.only(top: 3.0, left: 10.0, right: 10.0, bottom: 3.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -198,8 +199,7 @@ class _AktifScreenState extends State<AktifScreen> {
                 ),
                 TextButton(
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red.shade300),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.red.shade300),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

@@ -7,8 +7,8 @@ import 'package:kantoor_app/viewModels/livechat_provider.dart';
 import 'package:provider/provider.dart';
 
 class LiveChatScreen extends StatefulWidget {
-  Data gedung;
-  LiveChatScreen({
+  final Data gedung;
+  const LiveChatScreen({
     Key? key,
     required this.gedung,
   }) : super(key: key);
