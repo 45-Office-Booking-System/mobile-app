@@ -71,7 +71,6 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             _buildCardSetting(Icons.perm_device_info_rounded, "Syarat dan Ketentuan", const KebijakanPrivasi()),
             _buildCardSetting(Icons.privacy_tip_outlined, "Kebijakan Privasi", const KebijakanPrivasi()),
-            _buildCardSetting(Icons.screen_share_outlined, "Bagikan", const KebijakanPrivasi()),
           ],
         ),
       ),

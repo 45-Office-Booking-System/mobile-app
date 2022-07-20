@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final screens = const [
     HomeScreen(),
     OrderScreen(),
-    WishlistScreen(),
+    // WishlistScreen(),
     AccountScreen(),
   ];
 
@@ -32,13 +32,13 @@ class _MainScreenState extends State<MainScreen> {
             selectedItemIcon: const [
               "assets/icons/home_active.png",
               "assets/icons/order_active.png",
-              "assets/icons/wishlist_active.png",
+              // "assets/icons/wishlist_active.png",
               "assets/icons/account_active.png",
             ],
             unselectedItemIcon: const [
               "assets/icons/home_inactive.png",
               "assets/icons/order_inactive.png",
-              "assets/icons/wishlist_inactive.png",
+              // "assets/icons/wishlist_inactive.png",
               "assets/icons/account_inactive.png",
             ],
             manager: manager,

@@ -3,6 +3,7 @@ import 'package:kantoor_app/screens/auth/widgets/auth_button.dart';
 import 'package:kantoor_app/screens/main/main_screen.dart';
 import 'package:kantoor_app/utils/theme.dart';
 import 'package:kantoor_app/viewModels/auth_provider.dart';
+import 'package:kantoor_app/viewModels/screen_index_value.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -132,32 +133,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   return null;
                 },
               ),
-              // textField(
-              //   text: 'Password',
-              //   icon: Icons.key,
-              //   isPasswordType: true,
-              //   isEmailType: false,
-              //   controller: _passwordController,
-              //   passwordView: isHiddenPassword,
-              //   suffixIcon: IconButton(
-              //     enableFeedback: false,
-              //     splashRadius: 0.1,
-              //     onPressed: () {
-              //       setState(() {
-              //         isHiddenPassword = !isHiddenPassword;
-              //       });
-              //     },
-              //     icon: isHiddenPassword
-              //         ? Icon(
-              //             Icons.visibility,
-              //             color: colorBlack.withOpacity(0.3),
-              //           )
-              //         : Icon(
-              //             Icons.visibility_off,
-              //             color: colorBlack.withOpacity(0.3),
-              //           ),
-              //   ),
-              // ),
               const SizedBox(
                 height: 8.0,
               ),
@@ -201,6 +176,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       final token = prefs.getString('token') ?? "";
 
                       if (token.isNotEmpty) {
+                        // ignore: use_build_context_synchronously
+                        Provider.of<ScreenIndexProvider>(context, listen: false).setCurrentIndex(0);
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,

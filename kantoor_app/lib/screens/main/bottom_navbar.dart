@@ -33,7 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     List<Widget> navBarItems = [];
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
       navBarItems.add(
         bottomNavBarItem(
           _selectedItemIcon[i],
