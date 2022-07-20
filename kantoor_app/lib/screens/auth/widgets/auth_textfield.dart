@@ -4,6 +4,7 @@ import 'package:kantoor_app/utils/theme.dart';
 Widget textField({
   required String text,
   required IconData icon,
+  required bool isEmailType,
   required bool isPasswordType,
   required TextEditingController controller,
   required bool passwordView,
@@ -12,8 +13,6 @@ Widget textField({
   return TextFormField(
     controller: controller,
     obscureText: passwordView,
-    enableSuggestions: !isPasswordType,
-    autocorrect: !isPasswordType,
     cursorColor: Colors.green[300],
     decoration: InputDecoration(
       prefixIcon: Icon(
@@ -31,12 +30,14 @@ Widget textField({
           style: BorderStyle.none,
         ),
       ),
-      floatingLabelBehavior: FloatingLabelBehavior.never,
     ),
     keyboardType: isPasswordType ? TextInputType.visiblePassword : TextInputType.emailAddress,
     validator: (value) {
       if (value == null || value.isEmpty) {
         return 'Form tidak boleh kosong';
+      } else if (!RegExp(r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$").hasMatch(value) &&
+          isEmailType) {
+        return 'Please Enter Valid Email (ex: kantoor@gmail.com)';
       } else if (isPasswordType && value.length < 6) {
         return 'Password minimal 6 karakter';
       }

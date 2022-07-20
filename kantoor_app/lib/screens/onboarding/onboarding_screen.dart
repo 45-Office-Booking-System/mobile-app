@@ -48,6 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setBool("skipOnBoarding", true);
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) {
@@ -56,10 +57,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     );
                   },
-                  child: Text(
-                    'Get Started',
-                    style: subtitleTextStyle.copyWith(fontSize: 14),
-                  ),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -74,6 +71,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         return primaryColor500;
                       },
                     ),
+                  ),
+                  child: Text(
+                    'Get Started',
+                    style: subtitleTextStyle.copyWith(fontSize: 16, color: colorWhite),
                   ),
                 ),
               ),

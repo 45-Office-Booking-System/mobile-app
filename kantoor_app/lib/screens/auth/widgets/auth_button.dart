@@ -10,14 +10,6 @@ Widget authButton({required BuildContext context, required bool isLogin, require
       onPressed: () {
         onTap();
       },
-      child: Text(
-        isLogin ? 'MASUK' : 'DAFTAR',
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -31,6 +23,14 @@ Widget authButton({required BuildContext context, required bool isLogin, require
             }
             return primaryColor500;
           },
+        ),
+      ),
+      child: Text(
+        isLogin ? 'MASUK' : 'DAFTAR',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
         ),
       ),
     ),

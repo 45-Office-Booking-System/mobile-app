@@ -1,32 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:kantoor_app/screens/auth/auth_screen.dart';
-import 'package:kantoor_app/screens/onboarding/splashscreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kantoor_app/screens/onboarding/splash_screen.dart';
+import 'package:kantoor_app/utils/theme.dart';
+import 'package:kantoor_app/viewModels/auth_provider.dart';
+import 'package:kantoor_app/viewModels/booking_provider.dart';
+import 'package:kantoor_app/viewModels/gedung_provider.dart';
+import 'package:kantoor_app/viewModels/livechat_provider.dart';
+import 'package:kantoor_app/viewModels/location_selected_value.dart';
+import 'package:kantoor_app/viewModels/review_provider.dart';
+import 'package:kantoor_app/viewModels/screen_index_value.dart';
+import 'package:kantoor_app/viewModels/user_provider.dart';
+import 'package:provider/provider.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final skipAuth = prefs.getBool('skipAuth') ?? false;
-
-  runApp(MyApp(skipAuth: skipAuth));
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool skipAuth;
-  const MyApp({
-    Key? key,
-    required this.skipAuth,
-  }) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Kantoor App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ScreenIndexProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocationSelectedProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GedungProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LivechatProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BookingProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PostReviewProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Kantoor App',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          scaffoldBackgroundColor: colorWhite,
+        ),
+        home: const SplashScreen(),
       ),
-      home: skipAuth ? const AuthScreen() : SplashScreen(),
     );
   }
 }
